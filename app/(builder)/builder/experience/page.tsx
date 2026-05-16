@@ -2,10 +2,11 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Plus, Trash2, ArrowLeft, ArrowRight, GripVertical, Sparkles, AlertCircle, TrendingUp } from 'lucide-react';
+import { Plus, Trash2, ArrowLeft, ArrowRight, GripVertical, Sparkles, TrendingUp } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
+import { AIBadge } from '@/components/ui/ai-badge';
 import { useCVStore } from '@/store/cv-store';
 import { useAIEnhance } from '@/hooks/use-ai-enhance';
 
@@ -45,6 +46,7 @@ export default function ExperienceStep() {
   };
 
   return (
+    <>
       <div className="space-y-8 pb-32 md:pb-12">
         {experiences.length === 0 ? (
           <div className="text-center py-16 border-2 border-dashed border-border rounded-2xl bg-surface-2 animate-fade-in">
@@ -275,5 +277,6 @@ export default function ExperienceStep() {
           </Button>
         </div>
       </div>
+    </>
   );
 }

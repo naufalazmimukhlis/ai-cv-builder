@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-interface AIBadgeProps extends React.HTMLAttributes<HTMLDivElement> {}
+type AIBadgeProps = React.HTMLAttributes<HTMLDivElement>;
 
 export function AIBadge({ children, className, ...props }: AIBadgeProps) {
   return (

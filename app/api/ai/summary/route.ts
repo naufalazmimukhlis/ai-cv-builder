@@ -30,9 +30,9 @@ export async function POST(request: NextRequest) {
   try {
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({
-      model: 'gemini-1.5-flash',
+      model: 'gemini-2.0-flash',
       generationConfig: {
-        temperature: 0.8,
+        temperature: 0.7,
         maxOutputTokens: 512,
       },
     });
@@ -51,7 +51,10 @@ export async function POST(request: NextRequest) {
       summary: String(parsed.summary).substring(0, 800),
     });
   } catch (err) {
-    console.error('[Summary Error]:', err);
-    return NextResponse.json({ error: 'Gagal membuat summary.' }, { status: 500 });
+    console.error('AI ERROR [Summary Generation]:', err);
+    return NextResponse.json({ 
+      error: 'Gagal membuat professional summary.',
+      details: err instanceof Error ? err.message : 'Unknown AI error'
+    }, { status: 500 });
   }
 }

@@ -68,9 +68,9 @@ export async function POST(request: NextRequest) {
   try {
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({
-      model: 'gemini-1.5-flash',
+      model: 'gemini-2.0-flash',
       generationConfig: {
-        temperature: 0.7,
+        temperature: 0.65,
         topP: 0.9,
         maxOutputTokens: 4096,
       },
@@ -121,8 +121,11 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ result: safeResult });
   } catch (err) {
-    console.error('[AI Enhance Error]:', err);
-    // Graceful fallback
-    return NextResponse.json({ result: buildFallbackResult(cvData) });
+    console.error('AI ERROR [Full CV Enhancement]:', err);
+    // Graceful fallback with error info
+    return NextResponse.json({ 
+      result: buildFallbackResult(cvData),
+      warning: 'AI Optimization partially failed. Using fallback enhancement.'
+    });
   }
 }

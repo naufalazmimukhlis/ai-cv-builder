@@ -61,24 +61,25 @@ export function buildBulletOptimizerPrompt(
   const sanitizedTitle = sanitizeForAI(jobTitle);
   return `${CV_SYSTEM_PROMPT}
 
-Ubah deskripsi tugas/pengalaman harian ini menjadi pencapaian berkaliber tinggi untuk posisi ${sanitizedTitle}.
+Ubah deskripsi tugas/pengalaman harian ini menjadi pencapaian berkaliber tinggi (STAR Method) untuk posisi ${sanitizedTitle}.
 
-BULLET ASLI DARI KANDIDAT:
+INPUT KANDIDAT:
 "${sanitizedBullet}"
 
-KEYWORDS ATS TARGET YANG PERLU DIMASUKKAN (Jika relevan):
-${keywords.slice(0, 8).join(', ')}
+KEYWORDS STRATEGIS UNTUK DISISIPKAN:
+${keywords.slice(0, 10).join(', ')}
 
-ATURAN KHUSUS UNTUK BULLET INI:
-1. Translasi task biasa menjadi kalimat bertenaga. (Contoh buruk: "membuat website toko online" -> Contoh baik: "Developed and maintained responsive e-commerce websites with optimized user experience, contributing to improved customer engagement and smoother online transactions.")
-2. Buat terdengar sangat natural, meyakinkan (believable), dan elegan.
-3. Maksimal 2 baris (sekitar 150-200 karakter). Jangan terlalu panjang.
-4. Gunakan bahasa yang sama dengan bullet asli kandidat.
+KRITERIA KEBERHASILAN (PENTING):
+1. GUNAKAN ACTION VERB KUAT di awal kalimat (Spearheaded, Orchestrated, Engineered, etc).
+2. IMPLEMENTASIKAN METODE STAR: Situation/Task + Action + Result.
+3. WAJIB MENAMBAHKAN ESTIMASI METRIK/ANGKA yang realistis jika tidak ada (contoh: "meningkatkan efisiensi sebesar 25%", "mengurangi waktu pemrosesan hingga 40%").
+4. SESUAIKAN DENGAN TARGET POSISI: Kalimat harus relevan dengan ekspektasi recruiter untuk ${sanitizedTitle}.
+5. JANGAN GUNAKAN KATA "SAYA". Langsung mulai dengan kata kerja.
 
 Response HANYA dalam JSON valid:
 {
-  "optimized": "hasil kalimat yang sempurna",
-  "explanation": "Alasan singkat 1 kalimat mengapa ini lebih baik di mata HRD"
+  "optimized": "Hasil penulisan ulang yang powerful, profesional, dan mengandung angka pencapaian",
+  "explanation": "Penjelasan singkat mengapa versi ini akan memikat HRD"
 }`;
 }
 
@@ -87,31 +88,37 @@ Response HANYA dalam JSON valid:
 // ============================================================
 export function buildSummaryPrompt(cvData: Partial<CVData>): string {
   const { personal, target, experiences, skills } = cvData;
-  const yearsExp = experiences?.length || 0;
-  const topSkills = skills?.technical?.slice(0, 5).join(', ') || '';
+  const topSkills = [
+    ...(skills?.technical || []),
+    ...(skills?.tools || [])
+  ].slice(0, 8).join(', ');
+
+  const expHighlights = experiences?.slice(0, 2).map(e => 
+    `${e.jobTitle} di ${e.company} (${e.bullets.slice(0, 2).map(b => b.text).join('. ')})`
+  ).join('. ') || '';
 
   return `${CV_SYSTEM_PROMPT}
 
-Buat Professional Summary (Profil Singkat) yang sangat tajam, *recruiter-oriented*, dan *impactful* berdasarkan profil kandidat berikut.
-Summary ini akan diletakkan di paling atas CV dan harus membuat HRD ingin membaca lebih lanjut dalam 6 detik pertama.
+Tugasmu adalah membuat Professional Summary (Profil Singkat) yang sangat tajam, recruiter-oriented, dan impactful.
+PENTING: Jangan hanya mengulangi kata-kata kandidat. Gunakan diksi profesional level eksekutif.
 
-POSISI TARGET: ${sanitizeForAI(target?.jobTitle || '')}
-NAMA KANDIDAT: ${sanitizeForAI(personal?.fullName || '')}
-JUMLAH PENGALAMAN KERJA: ${yearsExp}
-TOP SKILLS: ${sanitizeForAI(topSkills)}
-JOB DESCRIPTION EXCERPT: ${sanitizeForAI((target?.jobDescription || '').substring(0, 500))}
-KEYWORDS ATS DARI JD: ${(target?.keywords || []).slice(0, 8).join(', ')}
+DATA KANDIDAT UNTUK KONTEKS:
+- NAMA: ${sanitizeForAI(personal?.fullName || '')}
+- TARGET POSISI: ${sanitizeForAI(target?.jobTitle || '')}
+- TARGET JOB DESCRIPTION: ${sanitizeForAI((target?.jobDescription || '').substring(0, 800))}
+- PENGALAMAN UTAMA: ${sanitizeForAI(expHighlights)}
+- TOP SKILLS & TOOLS: ${sanitizeForAI(topSkills)}
+- TARGET KEYWORDS: ${(target?.keywords || []).slice(0, 10).join(', ')}
 
-ATURAN SUMMARY:
-1. Hindari kalimat usang seperti "Saya adalah individu yang pekerja keras dan mencari tantangan baru".
-2. Buka dengan identitas profesional yang kuat (contoh: "Results-driven Frontend Developer with X years of experience...").
-3. Sebutkan kompetensi inti yang paling relevan dengan Job Description.
-4. Akhiri dengan nilai/dampak konkret yang bisa diberikan kepada perusahaan.
-5. Terdiri dari 3-4 kalimat padat. Tidak bertele-tele.
+STRUKTUR SUMMARY (3-4 KALIMAT):
+1. Kalimat 1: Identitas profesional yang kuat + jumlah tahun pengalaman/senioritas + keahlian utama.
+2. Kalimat 2: Hubungkan pengalaman terbesar kandidat dengan kebutuhan yang ada di Job Description.
+3. Kalimat 3: Sebutkan tools atau metodologi spesifik yang membuat kandidat unggul (Usp).
+4. Kalimat 4: Pernyataan dampak (value proposition) — apa yang akan kandidat berikan jika direkrut.
 
 Response HANYA dalam JSON valid:
 {
-  "summary": "Teks professional summary"
+  "summary": "Teks professional summary yang sangat meyakinkan dan ATS-optimized"
 }`;
 }
 

@@ -36,9 +36,9 @@ export async function POST(request: NextRequest) {
   try {
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({
-      model: 'gemini-1.5-flash',
+      model: 'gemini-2.0-flash',
       generationConfig: {
-        temperature: 0.3,
+        temperature: 0.2,
         maxOutputTokens: 1024,
       },
     });
@@ -71,7 +71,10 @@ export async function POST(request: NextRequest) {
       keywords: (parsed.keywords || []).slice(0, 15),
     });
   } catch (err) {
-    console.error('[Keywords Error]:', err);
-    return NextResponse.json({ error: 'Gagal mengekstrak keywords.' }, { status: 500 });
+    console.error('AI ERROR [Keyword Extraction]:', err);
+    return NextResponse.json({ 
+      error: 'Gagal mengekstrak keywords dari Job Description.',
+      details: err instanceof Error ? err.message : 'Unknown AI error'
+    }, { status: 500 });
   }
 }

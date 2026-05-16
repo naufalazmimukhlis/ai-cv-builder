@@ -43,9 +43,9 @@ export async function POST(request: NextRequest) {
   try {
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({
-      model: 'gemini-1.5-flash',
+      model: 'gemini-2.0-flash',
       generationConfig: {
-        temperature: 0.75,
+        temperature: 0.7,
         maxOutputTokens: 512,
       },
     });
@@ -56,15 +56,16 @@ export async function POST(request: NextRequest) {
     const parsed = parseAIJSON<AIBulletResult>(text);
 
     if (!parsed?.optimized) {
+      console.warn('[AI WARNING]: Bullet point optimization returned malformed JSON or empty result.');
       // Fallback: prefix with an action verb if missing
-      const actionVerbs = ['Mengembangkan', 'Meningkatkan', 'Memimpin', 'Mengoptimalkan'];
+      const actionVerbs = ['Developed', 'Implemented', 'Spearheaded', 'Optimized', 'Orchestrated'];
       const verb = actionVerbs[Math.floor(Math.random() * actionVerbs.length)];
       const improved = bullet.startsWith(verb.slice(0, 5))
         ? bullet
         : `${verb} ${bullet.toLowerCase().replace(/^(saya|kami|tim)\s/i, '')}`;
       return NextResponse.json({
         optimized: improved,
-        explanation: 'Ditambahkan action verb untuk meningkatkan impact',
+        explanation: 'AI fallback: Action verb added for better impact.',
       });
     }
 
@@ -73,7 +74,10 @@ export async function POST(request: NextRequest) {
       explanation: String(parsed.explanation || '').substring(0, 300),
     });
   } catch (err) {
-    console.error('[Bullet Error]:', err);
-    return NextResponse.json({ error: 'Gagal mengoptimalkan bullet point.' }, { status: 500 });
+    console.error('AI ERROR [Bullet Optimization]:', err);
+    return NextResponse.json({ 
+      error: 'Gagal mengoptimalkan bullet point. Pastikan API Key valid dan coba lagi.',
+      details: err instanceof Error ? err.message : 'Unknown AI error'
+    }, { status: 500 });
   }
 }
