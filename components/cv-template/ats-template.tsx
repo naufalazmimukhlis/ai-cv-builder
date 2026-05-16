@@ -47,48 +47,52 @@ export const ATSTemplate = React.forwardRef<HTMLDivElement, ATSTemplateProps>(
     }
 
     return (
-      <div 
-        ref={ref} 
+      <div
+        ref={ref}
         className={`cv-preview-container ${className || ''}`}
       >
         {/* Header */}
-        <div className="mb-6">
+        <div className="text-center mb-5">
           {personal?.fullName && (
-            <div className="cv-name">
+            <h1 className="cv-name uppercase mb-1">
               {personal.fullName}
-            </div>
+            </h1>
           )}
           {target?.jobTitle && (
-            <div className="cv-title">
+            <div className="cv-title uppercase text-center tracking-tight">
               {target.jobTitle}
             </div>
           )}
         </div>
 
-        {/* Contact Bar */}
-        <div className="cv-contact-bar">
-          {personal?.email && (
-            <span className="font-bold">{personal.email}</span>
-          )}
-          {personal?.phone && (
-            <span className="font-bold">{personal.phone}</span>
-          )}
-          {personal?.location && (
-            <span className="font-bold">{personal.location}</span>
-          )}
-          {personal?.linkedin && (
-            <span className="font-bold">{personal.linkedin.replace(/^https?:\/\//i, '')}</span>
-          )}
+        {/* Contact Bar - Centered and Responsive */}
+        <div className="cv-contact-bar justify-center text-center flex-wrap gap-x-3 gap-y-1.5 px-2">
+          {[
+            personal?.email,
+            personal?.phone,
+            personal?.linkedin ? `LinkedIn: ${personal.linkedin.replace(/^https?:\/\/(www\.)?/i, '')}` : null,
+            personal?.portfolio ? `Link: ${personal.portfolio.replace(/^https?:\/\/(www\.)?/i, '')}` : null,
+            personal?.location,
+          ]
+            .filter(Boolean)
+            .map((item, index, array) => (
+              <React.Fragment key={index}>
+                <span className="font-bold">{item}</span>
+                {index < array.length - 1 && (
+                  <span className="font-normal opacity-40">|</span>
+                )}
+              </React.Fragment>
+            ))}
         </div>
 
         {/* Profile / Summary Section */}
         {summary && (
-          <div className="break-inside-avoid mb-6">
-            <div className="cv-section-title">
+          <div className="break-inside-avoid mb-5">
+            <h2 className="cv-section-title">
               {t.summary}
-            </div>
+            </h2>
             <hr className="cv-section-divider" />
-            <p className="text-sm md:text-base leading-relaxed text-justify break-words whitespace-pre-wrap font-medium">
+            <p className="text-sm md:text-[10.5pt] leading-relaxed text-justify break-words whitespace-pre-wrap font-medium">
               {summary}
             </p>
           </div>
@@ -96,18 +100,18 @@ export const ATSTemplate = React.forwardRef<HTMLDivElement, ATSTemplateProps>(
 
         {/* Work Experience */}
         {experiences && experiences.length > 0 && (
-          <div className="break-inside-avoid mb-6">
-            <div className="cv-section-title">
+          <div className="break-inside-avoid mb-5">
+            <h2 className="cv-section-title">
               {t.experience}
-            </div>
+            </h2>
             <hr className="cv-section-divider" />
             {experiences.map((exp) => (
-              <div key={exp.id} className="break-inside-avoid mb-4">
-                <div className="cv-exp-header">
-                  <span className="cv-exp-title">
+              <div key={exp.id} className="break-inside-avoid mb-5 last:mb-0">
+                <div className="cv-exp-header flex-wrap gap-x-4">
+                  <span className="cv-exp-title flex-1 min-w-[60%]">
                     {lang === 'id' ? exp.jobTitleId : exp.jobTitleEn}
                   </span>
-                  <span className="cv-exp-date">
+                  <span className="cv-exp-date whitespace-nowrap text-right">
                     {formatDateRange(
                       exp.startMonth,
                       exp.startYear,
@@ -118,7 +122,7 @@ export const ATSTemplate = React.forwardRef<HTMLDivElement, ATSTemplateProps>(
                     )}
                   </span>
                 </div>
-                <div className="cv-exp-company">
+                <div className="cv-exp-company italic">
                   {exp.company}
                   {exp.location ? ` | ${exp.location}` : ''}
                 </div>
@@ -128,7 +132,7 @@ export const ATSTemplate = React.forwardRef<HTMLDivElement, ATSTemplateProps>(
                       const bulletText = lang === 'id' ? bullet.textId : bullet.textEn;
                       if (!bulletText.trim()) return null;
                       return (
-                        <li key={bullet.id}>
+                        <li key={bullet.id} className="text-justify leading-snug">
                           {bulletText}
                         </li>
                       );
@@ -143,32 +147,32 @@ export const ATSTemplate = React.forwardRef<HTMLDivElement, ATSTemplateProps>(
         {/* Skills */}
         {skills && (
           Object.values(skills).some((arr) => arr.length > 0) && (
-            <div className="break-inside-avoid mb-6">
-              <div className="cv-section-title">
+            <div className="break-inside-avoid mb-5">
+              <h2 className="cv-section-title">
                 {t.skills}
-              </div>
+              </h2>
               <hr className="cv-section-divider" />
-              <div className="space-y-1.5">
+              <div className="space-y-1">
                 {skills.technical.length > 0 && (
-                  <div className="cv-skills-row">
+                  <div className="cv-skills-row text-sm md:text-[10pt]">
                     <span className="cv-skills-label">{t.technical_skills}: </span>
                     {skills.technical.join(', ')}
                   </div>
                 )}
                 {skills.tools.length > 0 && (
-                  <div className="cv-skills-row">
+                  <div className="cv-skills-row text-sm md:text-[10pt]">
                     <span className="cv-skills-label">Tools: </span>
                     {skills.tools.join(', ')}
                   </div>
                 )}
                 {skills.soft.length > 0 && (
-                  <div className="cv-skills-row">
+                  <div className="cv-skills-row text-sm md:text-[10pt]">
                     <span className="cv-skills-label">{t.soft_skills}: </span>
                     {skills.soft.join(', ')}
                   </div>
                 )}
                 {skills.languages.length > 0 && (
-                  <div className="cv-skills-row">
+                  <div className="cv-skills-row text-sm md:text-[10pt]">
                     <span className="cv-skills-label">{t.languages}: </span>
                     {skills.languages.join(', ')}
                   </div>
@@ -180,21 +184,21 @@ export const ATSTemplate = React.forwardRef<HTMLDivElement, ATSTemplateProps>(
 
         {/* Education */}
         {education && education.length > 0 && (
-          <div className="break-inside-avoid mb-6">
-            <div className="cv-section-title">
+          <div className="break-inside-avoid mb-5">
+            <h2 className="cv-section-title">
               {t.education}
-            </div>
+            </h2>
             <hr className="cv-section-divider" />
             {education.map((edu) => (
-              <div key={edu.id} className="break-inside-avoid mb-3">
+              <div key={edu.id} className="break-inside-avoid mb-3 last:mb-0">
                 <div className="cv-exp-header">
                   <span className="cv-exp-title">
-                    {lang === 'id' ? edu.degreeId : edu.degreeEn} — {lang === 'id' ? edu.majorId : edu.majorEn}
+                    {edu.institution}
                   </span>
                   <span className="cv-exp-date">{edu.graduationYear}</span>
                 </div>
-                <div className="cv-exp-company">
-                  {edu.institution}
+                <div className="cv-exp-company italic">
+                  {lang === 'id' ? edu.degreeId : edu.degreeEn} — {lang === 'id' ? edu.majorId : edu.majorEn}
                   {edu.gpa ? ` | ${t.gpa}: ${edu.gpa}` : ''}
                 </div>
               </div>
@@ -205,19 +209,22 @@ export const ATSTemplate = React.forwardRef<HTMLDivElement, ATSTemplateProps>(
         {/* Certifications */}
         {certifications && certifications.length > 0 && (
           <div className="break-inside-avoid">
-            <div className="cv-section-title">
+            <h2 className="cv-section-title">
               {t.certifications}
-            </div>
+            </h2>
             <hr className="cv-section-divider" />
             {certifications.map((cert) => (
-              <div key={cert.id} className="break-inside-avoid mb-2">
+              <div key={cert.id} className="break-inside-avoid mb-2 last:mb-0">
                 <div className="cv-exp-header">
                   <span className="cv-exp-title">
-                    {lang === 'id' ? cert.nameId : cert.nameEn} — {cert.issuer}
+                    {lang === 'id' ? cert.nameId : cert.nameEn}
                   </span>
                   {cert.year && (
                     <span className="cv-exp-date">{cert.year}</span>
                   )}
+                </div>
+                <div className="cv-exp-company italic">
+                  {cert.issuer}
                 </div>
               </div>
             ))}

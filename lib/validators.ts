@@ -24,11 +24,13 @@ export const personalInfoSchema = z.object({
     .max(100, 'Lokasi terlalu panjang'),
   linkedin: z
     .string()
-    .url('URL LinkedIn tidak valid')
+    .max(200, 'URL terlalu panjang')
+    .optional()
     .or(z.literal('')),
   portfolio: z
     .string()
-    .url('URL Portfolio tidak valid')
+    .max(200, 'URL terlalu panjang')
+    .optional()
     .or(z.literal('')),
 });
 

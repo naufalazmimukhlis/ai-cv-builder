@@ -26,18 +26,21 @@ export function PDFExportButton({ resumeRef }: PDFExportButtonProps) {
       ]);
 
       const element = resumeRef.current;
-      
+
       const canvas = await html2canvas(element, {
-        scale: 3, // Increased scale for better resolution
+        scale: 3, 
         useCORS: true,
+        allowTaint: true,
         scrollY: 0,
         backgroundColor: '#ffffff',
         logging: false,
+        imageTimeout: 0,
+        windowWidth: 850,
         onclone: (clonedDoc) => {
-          const cvContainer = clonedDoc.querySelector('.cv-preview-container');
+          const cvContainer = clonedDoc.querySelector('.cv-preview-container') as HTMLElement;
           if (cvContainer) {
             // Aggressively clean up all parent styles in the clone
-            let curr: HTMLElement | null = cvContainer as HTMLElement;
+            let curr: HTMLElement | null = cvContainer;
             while (curr) {
               curr.style.transform = 'none';
               curr.style.opacity = '1';
@@ -47,7 +50,7 @@ export function PDFExportButton({ resumeRef }: PDFExportButtonProps) {
               curr = curr.parentElement;
             }
 
-            // Force pure black on all text and borders
+            // Remove any absolute elements or things that might overlap
             const allElements = cvContainer.querySelectorAll('*');
             allElements.forEach((el) => {
               const style = (el as HTMLElement).style;
@@ -56,24 +59,36 @@ export function PDFExportButton({ resumeRef }: PDFExportButtonProps) {
               style.setProperty('filter', 'none', 'important');
               style.setProperty('text-shadow', 'none', 'important');
               style.setProperty('background-image', 'none', 'important');
+              style.setProperty('transition', 'none', 'important');
+              style.setProperty('animation', 'none', 'important');
+              style.setProperty('box-shadow', 'none', 'important');
               
-              if (el.tagName === 'HR' || el.tagName === 'DIV' && (el as HTMLElement).className.includes('divider')) {
+              if (el.tagName === 'HR' || (el as HTMLElement).className.includes('divider')) {
                 style.setProperty('border-color', '#000000', 'important');
                 style.setProperty('background-color', '#000000', 'important');
               }
             });
+
+            // Ensure fixed width for stable layout calculation (matching preview's 850px)
+            cvContainer.style.width = '850px'; 
+            cvContainer.style.maxWidth = '850px';
+            cvContainer.style.minWidth = '850px';
+            cvContainer.style.padding = '1.5cm 1.8cm'; 
+            cvContainer.style.textAlign = 'justify';
+            cvContainer.style.setProperty('text-justify', 'inter-word', 'important');
+            cvContainer.style.letterSpacing = 'normal';
+            cvContainer.style.wordSpacing = 'normal';
           }
         },
-        windowWidth: 850, // Standardize capture width
       });
 
       const imgData = canvas.toDataURL('image/png', 1.0);
       const pdf = new jsPDF('p', 'mm', 'a4');
-      
+
       const imgWidth = 210;
       const pageHeight = 295;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      
+
       let heightLeft = imgHeight;
       let position = 0;
 
@@ -111,8 +126,8 @@ export function PDFExportButton({ resumeRef }: PDFExportButtonProps) {
       leftIcon={<Download className="w-4 h-4" />}
       className="w-full sm:w-auto shadow-button hover:shadow-button-hover font-semibold"
     >
-      {isGenerating 
-        ? (language === 'id' ? 'Membuat PDF...' : 'Generating PDF...') 
+      {isGenerating
+        ? (language === 'id' ? 'Membuat PDF...' : 'Generating PDF...')
         : (language === 'id' ? 'Unduh PDF (ATS Ready)' : 'Download PDF (ATS Ready)')}
     </Button>
   );

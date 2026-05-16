@@ -87,7 +87,7 @@ export const optimizeBulletLocal = (text: string, language: 'id' | 'en'): { opti
 /**
  * Performs full CV enhancement locally
  */
-export const enhanceCVLocal = async (cvData: Partial<CVData>): Promise<AIEnhancementResult> => {
+export const enhanceCVLocal = async (cvData: Partial<CVData>, language: 'id' | 'en' = 'id'): Promise<AIEnhancementResult> => {
   const atsResult = calculateATSScore(cvData);
   
   // Extract keywords from job description if exists
@@ -101,7 +101,7 @@ export const enhanceCVLocal = async (cvData: Partial<CVData>): Promise<AIEnhance
   }));
 
   // Identify improvements
-  const improvements = atsResult.feedback.map(f => cvData.language === 'id' ? f.id : f.en);
+  const improvements = atsResult.feedback.map(f => language === 'id' ? f.id : f.en);
 
   return {
     professionalSummaryId: cvData.professionalSummaryId || '',
@@ -116,10 +116,10 @@ export const enhanceCVLocal = async (cvData: Partial<CVData>): Promise<AIEnhance
     atsScore: atsResult.score,
     improvements: improvements,
     tips: [
-      cvData.language === 'id' 
+      language === 'id' 
         ? 'Gunakan font standar seperti Arial atau Calibri untuk keterbacaan ATS maksimal.' 
         : 'Use standard fonts like Arial or Calibri for maximum ATS readability.',
-      cvData.language === 'id'
+      language === 'id'
         ? 'Pastikan setiap pengalaman memiliki setidaknya 3 poin pencapaian.'
         : 'Ensure each experience has at least 3 achievement points.'
     ]

@@ -15,11 +15,12 @@ interface DiffViewerProps {
 
 export function DiffViewer({ result, cvData }: DiffViewerProps) {
   const store = useCVStore();
+  const language = store.language || 'id';
   const [summaryAccepted, setSummaryAccepted] = React.useState<boolean | null>(null);
   const [expandedExp, setExpandedExp] = React.useState<string | null>(null);
 
   const handleAcceptSummary = () => {
-    store.setSummary(result.professionalSummary);
+    store.setSummaryBilingual(result.professionalSummaryId, result.professionalSummaryEn);
     setSummaryAccepted(true);
   };
 
@@ -27,22 +28,28 @@ export function DiffViewer({ result, cvData }: DiffViewerProps) {
     setSummaryAccepted(false);
   };
 
-  const handleAcceptExperience = (expId: string, bullets: string[]) => {
-    const optimizedBullets = bullets.map((text) => ({
+  const handleAcceptExperience = (expId: string, bulletsId: string[], bulletsEn: string[]) => {
+    const optimizedBullets = bulletsId.map((textId, i) => ({
       id: generateId(),
-      text,
+      textId: textId,
+      textEn: bulletsEn[i] || textId,
       aiOptimized: true,
     }));
     store.updateExperience(expId, { bullets: optimizedBullets });
   };
 
+  const currentSummaryResult = language === 'id' ? result.professionalSummaryId : result.professionalSummaryEn;
+  const currentSummaryOriginal = language === 'id' ? cvData.professionalSummaryId : cvData.professionalSummaryEn;
+
   return (
     <div className="space-y-4">
       {/* Professional Summary Diff */}
-      {result.professionalSummary && (
+      {currentSummaryResult && (
         <div className="border border-border rounded-xl overflow-hidden">
           <div className="flex items-center justify-between px-4 py-3 bg-surface-2 border-b border-border">
-            <span className="text-sm font-semibold text-primary">Ringkasan Profesional</span>
+            <span className="text-sm font-semibold text-primary">
+              {language === 'id' ? 'Profil Profesional' : 'Professional Profile'}
+            </span>
             {summaryAccepted === null && (
               <div className="flex gap-2">
                 <Button
@@ -53,7 +60,7 @@ export function DiffViewer({ result, cvData }: DiffViewerProps) {
                   className="text-xs border-danger/30 text-danger hover:bg-danger/5"
                   id="reject-summary-btn"
                 >
-                  Pertahankan
+                  {language === 'id' ? 'Pertahankan' : 'Keep Original'}
                 </Button>
                 <Button
                   variant="ghost"
@@ -63,31 +70,37 @@ export function DiffViewer({ result, cvData }: DiffViewerProps) {
                   className="text-xs border-success/30 text-success hover:bg-success/5"
                   id="accept-summary-btn"
                 >
-                  Gunakan
+                  {language === 'id' ? 'Gunakan' : 'Use AI'}
                 </Button>
               </div>
             )}
             {summaryAccepted !== null && (
               <span className={`text-xs font-medium ${summaryAccepted ? 'text-success' : 'text-[#64748B]'}`}>
-                {summaryAccepted ? '✓ Diterapkan' : '○ Dipertahankan asli'}
+                {summaryAccepted 
+                  ? (language === 'id' ? '✓ Diterapkan' : '✓ Applied') 
+                  : (language === 'id' ? '○ Dipertahankan asli' : '○ Kept original')}
               </span>
             )}
           </div>
           <div className="p-4 space-y-3">
             {/* Before */}
-            {cvData.professionalSummary && (
+            {currentSummaryOriginal && (
               <div>
-                <p className="text-[10px] font-semibold text-[#64748B] uppercase tracking-wider mb-1.5">Sebelum</p>
+                <p className="text-[10px] font-semibold text-[#64748B] uppercase tracking-wider mb-1.5">
+                  {language === 'id' ? 'Sebelum' : 'Before'}
+                </p>
                 <div className="diff-before">
-                  {cvData.professionalSummary}
+                  {currentSummaryOriginal}
                 </div>
               </div>
             )}
             {/* After */}
             <div>
-              <p className="text-[10px] font-semibold text-success uppercase tracking-wider mb-1.5">Sesudah (AI)</p>
+              <p className="text-[10px] font-semibold text-success uppercase tracking-wider mb-1.5">
+                {language === 'id' ? 'Sesudah (AI)' : 'After (AI)'}
+              </p>
               <div className="diff-after">
-                <Typewriter text={result.professionalSummary} speed={5} />
+                <Typewriter text={currentSummaryResult} speed={5} />
               </div>
             </div>
           </div>
@@ -100,8 +113,12 @@ export function DiffViewer({ result, cvData }: DiffViewerProps) {
         if (!originalExp) return null;
 
         const isExpanded = expandedExp === enhanced.id;
-        const originalBullets = originalExp.bullets.map((b) => b.text).filter(Boolean);
-        const hasChanges = JSON.stringify(originalBullets) !== JSON.stringify(enhanced.bullets);
+        
+        // Check for changes in current language
+        const originalBullets = originalExp.bullets.map((b) => language === 'id' ? b.textId : b.textEn).filter(Boolean);
+        const enhancedBullets = language === 'id' ? enhanced.bulletsId : enhanced.bulletsEn;
+        
+        const hasChanges = JSON.stringify(originalBullets) !== JSON.stringify(enhancedBullets);
 
         if (!hasChanges) return null;
 
@@ -114,7 +131,7 @@ export function DiffViewer({ result, cvData }: DiffViewerProps) {
               id={`exp-diff-${enhanced.id}`}
             >
               <span className="text-sm font-semibold text-primary">
-                {originalExp.jobTitle} — {originalExp.company}
+                {language === 'id' ? originalExp.jobTitleId : originalExp.jobTitleEn} — {originalExp.company}
               </span>
               <div className="flex items-center gap-2">
                 <span className="text-xs text-ai bg-ai/10 px-2 py-0.5 rounded-full">AI Optimized</span>
@@ -130,7 +147,9 @@ export function DiffViewer({ result, cvData }: DiffViewerProps) {
               <div className="p-4 space-y-3">
                 {/* Before */}
                 <div>
-                  <p className="text-[10px] font-semibold text-[#64748B] uppercase tracking-wider mb-1.5">Sebelum</p>
+                  <p className="text-[10px] font-semibold text-[#64748B] uppercase tracking-wider mb-1.5">
+                    {language === 'id' ? 'Sebelum' : 'Before'}
+                  </p>
                   <div className="diff-before space-y-1">
                     {originalBullets.map((b, i) => (
                       <p key={i}>• {b}</p>
@@ -139,9 +158,11 @@ export function DiffViewer({ result, cvData }: DiffViewerProps) {
                 </div>
                 {/* After */}
                 <div>
-                  <p className="text-[10px] font-semibold text-success uppercase tracking-wider mb-1.5">Sesudah (AI)</p>
+                  <p className="text-[10px] font-semibold text-success uppercase tracking-wider mb-1.5">
+                    {language === 'id' ? 'Sesudah (AI)' : 'After (AI)'}
+                  </p>
                   <div className="diff-after space-y-1">
-                    {enhanced.bullets.map((b, i) => (
+                    {enhancedBullets.map((b, i) => (
                       <p key={i}>• <Typewriter text={b} speed={5} /></p>
                     ))}
                   </div>
@@ -153,17 +174,18 @@ export function DiffViewer({ result, cvData }: DiffViewerProps) {
                     size="sm"
                     className="text-xs border-danger/30 text-danger hover:bg-danger/5 flex-1"
                     id={`reject-exp-${enhanced.id}`}
+                    onClick={() => setExpandedExp(null)}
                   >
-                    Pertahankan Asli
+                    {language === 'id' ? 'Pertahankan Asli' : 'Keep Original'}
                   </Button>
                   <Button
                     variant="ghost"
                     size="sm"
                     className="text-xs border-success/30 text-success hover:bg-success/5 flex-1"
-                    onClick={() => handleAcceptExperience(enhanced.id, enhanced.bullets)}
+                    onClick={() => handleAcceptExperience(enhanced.id, enhanced.bulletsId, enhanced.bulletsEn)}
                     id={`accept-exp-${enhanced.id}`}
                   >
-                    Gunakan Versi AI
+                    {language === 'id' ? 'Gunakan Versi AI' : 'Use AI Version'}
                   </Button>
                 </div>
               </div>

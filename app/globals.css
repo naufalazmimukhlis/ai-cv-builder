@@ -56,7 +56,10 @@
     font-feature-settings: 'kern' 1, 'liga' 1;
   }
 
-  h1, h2, h3, h4 {
+  h1,
+  h2,
+  h3,
+  h4 {
     @apply font-display;
     text-rendering: optimizeLegibility;
   }
@@ -74,12 +77,15 @@
     width: 6px;
     height: 6px;
   }
+
   ::-webkit-scrollbar-track {
     @apply bg-surface-2;
   }
+
   ::-webkit-scrollbar-thumb {
     @apply bg-border rounded-full;
   }
+
   ::-webkit-scrollbar-thumb:hover {
     @apply bg-[#8BA3BF];
   }
@@ -89,6 +95,7 @@
    Component Layer
    ============================================================ */
 @layer components {
+
   /* Glass Card */
   .glass-card {
     @apply bg-white/80 backdrop-blur-sm border border-white/60 rounded-xl shadow-card;
@@ -96,55 +103,32 @@
 
   /* Primary Button */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 
-           bg-primary text-white font-medium rounded-xl 
-           shadow-button hover:shadow-button-hover
-           hover:bg-primary-light active:scale-[0.98]
-           transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-white font-medium rounded-xl shadow-button hover:shadow-button-hover hover:bg-primary-light active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   /* Accent Button */
   .btn-accent {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 
-           bg-accent text-white font-medium rounded-xl 
-           shadow-button hover:shadow-button-hover hover:bg-accent-600
-           active:scale-[0.98] transition-all duration-200 
-           disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-accent text-white font-medium rounded-xl shadow-button hover:shadow-button-hover hover:bg-accent-600 active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   /* Warm CTA Button */
   .btn-warm {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 
-           bg-warm text-white font-semibold rounded-xl 
-           shadow-button hover:shadow-button-hover hover:bg-warm-600
-           active:scale-[0.98] transition-all duration-200 
-           disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-warm text-white font-semibold rounded-xl shadow-button hover:shadow-button-hover hover:bg-warm-600 active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   /* AI Button */
   .btn-ai {
-    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 
-           bg-ai text-white font-medium text-sm rounded-xl 
-           hover:bg-ai-600 active:scale-[0.98]
-           transition-all duration-200 shadow-ai
-           disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-ai text-white font-medium text-sm rounded-xl hover:bg-ai-600 active:scale-[0.98] transition-all duration-200 shadow-ai disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   /* Ghost Button */
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 
-           bg-transparent text-[#1A2332] font-medium rounded-xl border border-border
-           hover:bg-surface-2 hover:border-accent/30 active:scale-[0.98]
-           transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-transparent text-[#1A2332] font-medium rounded-xl border border-border hover:bg-surface-2 hover:border-accent/30 active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   /* Form Input */
   .form-input {
-    @apply w-full px-4 py-3 bg-white border border-border rounded-xl
-           text-[#1A2332] placeholder-[#64748B] text-sm
-           focus:outline-none focus:border-accent focus:shadow-input-focus
-           transition-all duration-200
-           disabled:bg-surface-2 disabled:cursor-not-allowed;
+    @apply w-full px-4 py-3 bg-white border border-border rounded-xl text-[#1A2332] placeholder-[#64748B] text-sm focus:outline-none focus:border-accent focus:shadow-input-focus transition-all duration-200 disabled:bg-surface-2 disabled:cursor-not-allowed;
   }
 
   .form-input.error {
@@ -153,10 +137,7 @@
 
   /* Form Textarea */
   .form-textarea {
-    @apply w-full px-4 py-3 bg-white border border-border rounded-xl
-           text-[#1A2332] placeholder-[#64748B] text-sm resize-none
-           focus:outline-none focus:border-accent focus:shadow-input-focus
-           transition-all duration-200;
+    @apply w-full px-4 py-3 bg-white border border-border rounded-xl text-[#1A2332] placeholder-[#64748B] text-sm resize-none focus:outline-none focus:border-accent focus:shadow-input-focus transition-all duration-200;
   }
 
   /* Form Label */
@@ -186,9 +167,7 @@
 
   /* Tag/Chip */
   .tag {
-    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium
-           bg-accent/10 text-accent border border-accent/20
-           hover:bg-accent/15 transition-colors duration-150 cursor-default;
+    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-accent/10 text-accent border border-accent/20 hover:bg-accent/15 transition-colors duration-150 cursor-default;
   }
 
   .tag-removable {
@@ -197,8 +176,7 @@
 
   /* Step indicator */
   .step-dot {
-    @apply w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold
-           border-2 transition-all duration-300;
+    @apply w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold border-2 transition-all duration-300;
   }
 
   .step-dot-active {
@@ -237,8 +215,8 @@
   /* Hero gradient */
   .hero-gradient {
     background: radial-gradient(ellipse at 20% 50%, rgba(45, 125, 210, 0.08) 0%, transparent 60%),
-                radial-gradient(ellipse at 80% 20%, rgba(124, 58, 237, 0.06) 0%, transparent 50%),
-                radial-gradient(ellipse at 60% 80%, rgba(244, 162, 97, 0.04) 0%, transparent 50%);
+      radial-gradient(ellipse at 80% 20%, rgba(124, 58, 237, 0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 60% 80%, rgba(244, 162, 97, 0.04) 0%, transparent 50%);
   }
 
   /* Card hover effect */
@@ -259,7 +237,7 @@
   .ai-glow {
     position: relative;
   }
-  
+
   .ai-glow::after {
     content: '';
     position: absolute;
@@ -286,8 +264,13 @@
 }
 
 @keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 /* ============================================================
@@ -301,6 +284,7 @@
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
+
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -315,6 +299,7 @@
   .pb-safe {
     padding-bottom: env(safe-area-inset-bottom);
   }
+
   .pt-safe {
     padding-top: env(safe-area-inset-top);
   }
@@ -362,51 +347,51 @@ body {
   color: #000000 !important;
   max-width: 21cm;
   margin: 0 auto;
-  padding: 1.8cm 2cm;
+  padding: 1.5cm 1.8cm;
   background: #fff !important;
   font-weight: 500 !important;
+  text-align: justify;
+  text-justify: inter-word;
 }
 
 .cv-name {
   font-size: 22pt;
   font-weight: 700;
-  letter-spacing: 0.02em;
   color: #000000 !important;
-  margin-bottom: 2px;
+  letter-spacing: -0.02em;
 }
 
 .cv-title {
-  font-size: 13pt;
+  font-size: 12pt;
+  font-weight: 700;
   color: #000000 !important;
-  font-weight: 600;
-  margin-bottom: 10px;
+  margin-top: 2px;
 }
 
 .cv-contact-bar {
-  font-size: 9.5pt;
-  color: #000000 !important;
-  border-top: 2px solid #000000 !important;
-  border-bottom: 2px solid #000000 !important;
-  padding: 5px 0;
-  margin-bottom: 14px;
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  font-size: 9.5pt;
+  color: #000000 !important;
+  margin-bottom: 1rem;
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
+  padding: 4px 0;
 }
 
 .cv-section-title {
-  font-size: 10pt;
+  font-size: 11pt;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
   color: #000000 !important;
-  margin-bottom: 4px;
-  margin-top: 14px;
+  margin-top: 1rem;
+  letter-spacing: 0.05em;
 }
 
 .cv-section-divider {
-  border: none !important;
-  border-top: 2px solid #000000 !important;
+  border: 0 !important;
+  border-top: 1px solid #000000 !important;
+  margin-top: 2px;
   margin-bottom: 8px;
   opacity: 1 !important;
 }
@@ -415,119 +400,195 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
+  margin-bottom: 1px;
 }
 
 .cv-exp-title {
-  font-size: 11pt;
   font-weight: 700;
+  font-size: 11pt;
   color: #000000 !important;
 }
 
 .cv-exp-date {
-  font-size: 9.5pt;
+  font-size: 10pt;
   font-weight: 700;
   color: #000000 !important;
 }
 
 .cv-exp-company {
   font-size: 10.5pt;
-  font-weight: 700;
   color: #000000 !important;
   margin-bottom: 4px;
 }
 
 .cv-bullet-list {
-  margin: 4px 0 8px 0;
+  list-style-type: disc;
+  margin-left: 1.2rem;
+  margin-top: 4px;
+  font-size: 10.5pt;
   padding-left: 0;
-  list-style: none;
 }
 
 .cv-bullet-list li {
-  font-size: 10pt;
+  margin-bottom: 2px;
   color: #000000 !important;
-  padding: 1.5px 0 1.5px 14px;
-  position: relative;
-  font-weight: 500;
-}
-
-.cv-bullet-list li::before {
-  content: '•';
-  position: absolute;
-  left: 0;
-  color: #000000 !important;
+  padding-left: 4px;
 }
 
 .cv-skills-row {
-  margin-bottom: 4px;
-  font-size: 10pt;
-  color: #000000 !important;
+  margin-bottom: 2px;
+  line-height: 1.4;
+  font-size: 10.5pt;
 }
 
 .cv-skills-label {
   font-weight: 700;
-  color: #000000 !important;
 }
 
 /* ============================================================
    Animations
    ============================================================ */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes slideDown {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes slideLeft {
-  from { opacity: 0; transform: translateX(20px); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @keyframes slideRight {
-  from { opacity: 0; transform: translateX(-20px); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  20% { transform: translateX(-6px); }
-  40% { transform: translateX(6px); }
-  60% { transform: translateX(-4px); }
-  80% { transform: translateX(4px); }
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  20% {
+    transform: translateX(-6px);
+  }
+
+  40% {
+    transform: translateX(6px);
+  }
+
+  60% {
+    transform: translateX(-4px);
+  }
+
+  80% {
+    transform: translateX(4px);
+  }
 }
 
 @keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(45, 125, 210, 0); }
-  50% { box-shadow: 0 0 0 8px rgba(45, 125, 210, 0.15); }
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(45, 125, 210, 0);
+  }
+
+  50% {
+    box-shadow: 0 0 0 8px rgba(45, 125, 210, 0.15);
+  }
 }
 
 @keyframes bounceSoft {
-  0% { transform: scale(1); }
-  40% { transform: scale(1.06); }
-  70% { transform: scale(0.97); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+
+  40% {
+    transform: scale(1.06);
+  }
+
+  70% {
+    transform: scale(0.97);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 @keyframes gradientShift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Print styles */
 @media print {
-  body { background: white; }
-  .no-print { display: none !important; }
+  body {
+    background: white;
+  }
+
+  .no-print {
+    display: none !important;
+  }
 }

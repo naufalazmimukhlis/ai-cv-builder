@@ -60,7 +60,7 @@ export function useAIEnhance(): UseAIEnhanceReturn {
     try {
       await simulateWork(1200); // Feel premium
       
-      const result = await enhanceCVLocal(cvData);
+      const result = await enhanceCVLocal(cvData, language);
       
       store.setAIProgress(100, language === 'id' ? 'Selesai!' : 'Done!');
       store.applyAIEnhancement(result);
