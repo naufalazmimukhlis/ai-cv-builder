@@ -11,6 +11,7 @@ import {
 } from '@react-pdf/renderer';
 import type { CVData } from '@/types/cv';
 import { formatDateRange } from '@/lib/utils';
+import translations from '@/data/translations.json';
 
 // Register fonts
 Font.register({
@@ -27,58 +28,64 @@ const styles = StyleSheet.create({
   page: {
     fontFamily: 'Helvetica',
     fontSize: 10,
-    lineHeight: 1.5,
+    lineHeight: 1.4,
     color: '#1a1a1a',
-    paddingTop: 48,
-    paddingBottom: 48,
-    paddingLeft: 56,
-    paddingRight: 56,
+    paddingTop: 40,
+    paddingBottom: 40,
+    paddingLeft: 50,
+    paddingRight: 50,
     backgroundColor: '#ffffff',
   },
   // Header
   name: {
-    fontSize: 22,
+    fontSize: 20,
     fontFamily: 'Helvetica-Bold',
     color: '#0F2040',
     letterSpacing: 0.5,
     marginBottom: 2,
+    textAlign: 'center',
   },
   jobTitle: {
-    fontSize: 13,
+    fontSize: 12,
     color: '#2D7DD2',
-    marginBottom: 8,
+    marginBottom: 6,
+    textAlign: 'center',
   },
   // Contact bar
   contactBar: {
     flexDirection: 'row',
+    justifyContent: 'center',
     flexWrap: 'wrap',
-    gap: 12,
-    borderTopWidth: 1.5,
-    borderBottomWidth: 1.5,
+    gap: 10,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
     borderColor: '#0F2040',
     paddingVertical: 4,
-    marginBottom: 14,
+    marginBottom: 12,
   },
   contactItem: {
-    fontSize: 9,
+    fontSize: 8.5,
     color: '#444',
   },
   // Section
   sectionTitle: {
-    fontSize: 9.5,
+    fontSize: 9,
     fontFamily: 'Helvetica-Bold',
     textTransform: 'uppercase',
-    letterSpacing: 1.5,
+    letterSpacing: 1.2,
     color: '#0F2040',
-    marginBottom: 3,
-    marginTop: 12,
+    marginBottom: 2,
+    marginTop: 10,
   },
   sectionDivider: {
     borderTopWidth: 1,
     borderColor: '#0F2040',
-    marginBottom: 6,
+    marginBottom: 5,
   },
   // Experience
+  expBlock: {
+    marginBottom: 8,
+  },
   expRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -86,7 +93,7 @@ const styles = StyleSheet.create({
     marginBottom: 1,
   },
   expTitle: {
-    fontSize: 11,
+    fontSize: 10.5,
     fontFamily: 'Helvetica-Bold',
     color: '#0F2040',
     flex: 1,
@@ -97,41 +104,42 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   expCompany: {
-    fontSize: 10,
+    fontSize: 9.5,
     color: '#333',
-    marginBottom: 3,
+    marginBottom: 2,
   },
   bulletContainer: {
-    marginBottom: 6,
+    marginTop: 2,
+    marginBottom: 4,
   },
   bullet: {
     flexDirection: 'row',
     marginBottom: 2,
-    paddingLeft: 2,
+    paddingLeft: 5,
   },
   bulletDot: {
-    width: 12,
-    fontSize: 9.5,
+    width: 10,
+    fontSize: 9,
     color: '#0F2040',
     flexShrink: 0,
-    marginTop: 0.5,
   },
   bulletText: {
-    fontSize: 9.5,
+    fontSize: 9,
     color: '#222',
     flex: 1,
-    lineHeight: 1.45,
+    lineHeight: 1.4,
+    textAlign: 'justify',
   },
   // Skills
   skillRow: {
     flexDirection: 'row',
-    marginBottom: 3,
-    fontSize: 9.5,
+    marginBottom: 2,
+    fontSize: 9,
   },
   skillLabel: {
     fontFamily: 'Helvetica-Bold',
     color: '#0F2040',
-    width: 70,
+    width: 80,
     flexShrink: 0,
   },
   skillValue: {
@@ -140,30 +148,32 @@ const styles = StyleSheet.create({
   },
   // Summary
   summaryText: {
-    fontSize: 9.5,
+    fontSize: 9,
     color: '#222',
-    lineHeight: 1.55,
+    lineHeight: 1.5,
+    textAlign: 'justify',
   },
   // Education
-  gpaText: {
-    fontSize: 9,
-    color: '#555',
+  eduBlock: {
+    marginBottom: 6,
   },
 });
 
 interface ATSTemplatePDFProps {
   data: CVData;
+  lang?: 'id' | 'en';
 }
 
-export function ATSTemplatePDF({ data }: ATSTemplatePDFProps) {
+export function ATSTemplatePDF({ data, lang = 'id' }: ATSTemplatePDFProps) {
   const { personal, target, experiences, skills, education, certifications, professionalSummary } = data;
+  const t = (translations as any)[lang];
 
   return (
     <Document
       title={`${personal.fullName} - CV ATS`}
       author={personal.fullName}
-      creator="ATS CV Builder Pro"
-      producer="ATS CV Builder Pro"
+      subject="Professional Resume"
+      keywords="ATS, Resume, CV, Professional"
     >
       <Page size="A4" style={styles.page}>
         {/* Header */}
@@ -193,22 +203,20 @@ export function ATSTemplatePDF({ data }: ATSTemplatePDFProps) {
           )}
         </View>
 
-        {/* Professional Summary */}
+        {/* Professional Summary - Heading REMOVED per user request */}
         {professionalSummary && (
-          <View>
-            <Text style={styles.sectionTitle}>RINGKASAN PROFESIONAL</Text>
-            <View style={styles.sectionDivider} />
+          <View style={{ marginBottom: 12 }}>
             <Text style={styles.summaryText}>{professionalSummary}</Text>
           </View>
         )}
 
         {/* Work Experience */}
-        {experiences.length > 0 && (
+        {experiences && experiences.length > 0 && (
           <View>
-            <Text style={styles.sectionTitle}>PENGALAMAN KERJA</Text>
+            <Text style={styles.sectionTitle}>{t.experience}</Text>
             <View style={styles.sectionDivider} />
             {experiences.map((exp) => (
-              <View key={exp.id} style={{ marginBottom: 8 }}>
+              <View key={exp.id} style={styles.expBlock} wrap={false}>
                 <View style={styles.expRow}>
                   <Text style={styles.expTitle}>{exp.jobTitle}</Text>
                   <Text style={styles.expDate}>
@@ -233,8 +241,8 @@ export function ATSTemplatePDF({ data }: ATSTemplatePDFProps) {
 
         {/* Skills */}
         {(skills.technical.length > 0 || skills.tools.length > 0 || skills.soft.length > 0 || skills.languages.length > 0) && (
-          <View>
-            <Text style={styles.sectionTitle}>KEAHLIAN</Text>
+          <View style={{ marginBottom: 10 }}>
+            <Text style={styles.sectionTitle}>{t.skills}</Text>
             <View style={styles.sectionDivider} />
             {skills.technical.length > 0 && (
               <View style={styles.skillRow}>
@@ -256,7 +264,7 @@ export function ATSTemplatePDF({ data }: ATSTemplatePDFProps) {
             )}
             {skills.languages.length > 0 && (
               <View style={styles.skillRow}>
-                <Text style={styles.skillLabel}>Bahasa:</Text>
+                <Text style={styles.skillLabel}>{lang === 'id' ? 'Bahasa' : 'Languages'}:</Text>
                 <Text style={styles.skillValue}>{skills.languages.join(', ')}</Text>
               </View>
             )}
@@ -264,19 +272,19 @@ export function ATSTemplatePDF({ data }: ATSTemplatePDFProps) {
         )}
 
         {/* Education */}
-        {education.length > 0 && (
+        {education && education.length > 0 && (
           <View>
-            <Text style={styles.sectionTitle}>PENDIDIKAN</Text>
+            <Text style={styles.sectionTitle}>{t.education}</Text>
             <View style={styles.sectionDivider} />
             {education.map((edu) => (
-              <View key={edu.id} style={{ marginBottom: 6 }}>
+              <View key={edu.id} style={styles.eduBlock} wrap={false}>
                 <View style={styles.expRow}>
                   <Text style={styles.expTitle}>{edu.degree} — {edu.major}</Text>
                   <Text style={styles.expDate}>{edu.graduationYear}</Text>
                 </View>
                 <Text style={styles.expCompany}>
                   {edu.institution}
-                  {edu.gpa ? ` | IPK: ${edu.gpa}` : ''}
+                  {edu.gpa ? ` | ${lang === 'id' ? 'IPK' : 'GPA'}: ${edu.gpa}` : ''}
                 </Text>
               </View>
             ))}
@@ -284,12 +292,12 @@ export function ATSTemplatePDF({ data }: ATSTemplatePDFProps) {
         )}
 
         {/* Certifications */}
-        {certifications.length > 0 && (
+        {certifications && certifications.length > 0 && (
           <View>
-            <Text style={styles.sectionTitle}>SERTIFIKASI</Text>
+            <Text style={styles.sectionTitle}>{t.certifications}</Text>
             <View style={styles.sectionDivider} />
             {certifications.map((cert) => (
-              <View key={cert.id} style={styles.expRow}>
+              <View key={cert.id} style={styles.expRow} wrap={false}>
                 <Text style={{ ...styles.expCompany, flex: 1, marginBottom: 3 }}>
                   {cert.name} — {cert.issuer}
                 </Text>

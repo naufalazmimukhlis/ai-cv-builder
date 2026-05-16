@@ -1,0 +1,36 @@
+{
+  "role": {
+    "en": "Customer Service Representative",
+    "id": "Customer Service"
+  },
+  "summaries": {
+    "en": [
+      "Patient and empathetic {role} with expertise in conflict resolution and client communication. Skilled in {skills} and dedicated to providing exceptional user support.",
+      "Results-oriented {role} with a strong background in customer satisfaction and problem-solving using {keywords}. Committed to delivering high-quality service.",
+      "Experienced {role} with proficiency in {skills}. Passionate about building client trust and improving service efficiency."
+    ],
+    "id": [
+      "{role} yang sabar dan empatik dengan keahlian dalam resolusi konflik dan komunikasi klien. Mahir dalam {skills} dan berdedikasi untuk memberikan dukungan pengguna yang luar biasa.",
+      "{role} yang berorientasi pada hasil dengan latar belakang kuat dalam kepuasan pelanggan dan pemecahan masalah menggunakan {keywords}. Berkomitmen untuk memberikan layanan berkualitas tinggi.",
+      "{role} berpengalaman dengan kemahiran dalam {skills}. Bersemangat tentang membangun kepercayaan klien dan meningkatkan efisiensi layanan."
+    ]
+  },
+  "experiences": {
+    "en": [
+      "Provided high-quality customer support using {skills}, maintaining a 95% satisfaction rating.",
+      "Resolved complex customer issues and complaints using {keywords}, ensuring quick and effective solutions.",
+      "Managed multiple communication channels including email, phone, and live chat.",
+      "Collaborated with product teams to provide customer feedback and improve service offerings.",
+      "Maintained accurate customer records and handled data entry with high attention to detail."
+    ],
+    "id": [
+      "Memberikan dukungan pelanggan berkualitas tinggi menggunakan {skills}, mempertahankan peringkat kepuasan 95%.",
+      "Menyelesaikan masalah dan keluhan pelanggan yang kompleks menggunakan {keywords}, memastikan solusi cepat dan efektif.",
+      "Mengelola berbagai saluran komunikasi termasuk email, telepon, dan live chat.",
+      "Berkolaborasi dengan tim produk untuk memberikan umpan balik pelanggan dan meningkatkan penawaran layanan.",
+      "Memelihara catatan pelanggan yang akurat dan menangani entri data dengan perhatian tinggi terhadap detail."
+    ]
+  },
+  "skills": ["Communication", "Conflict Resolution", "CRM", "Zendesk", "Problem Solving", "Active Listening", "Data Entry"],
+  "ats_keywords": ["Customer Relations", "Service Excellence", "Technical Support", "Complaint Handling", "Client Retention", "Communication Strategy"]
+}

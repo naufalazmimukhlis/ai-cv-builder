@@ -12,7 +12,7 @@ import { useAIEnhance } from '@/hooks/use-ai-enhance';
 
 export default function ExperienceStep() {
   const router = useRouter();
-  const { experiences, addExperience, updateExperience, removeExperience, addBullet, updateBullet, removeBullet } = useCVStore();
+  const { experiences, addExperience, updateExperience, removeExperience, addBullet, updateBullet, removeBullet, language } = useCVStore();
   const { optimizeBullet } = useAIEnhance();
   const [optimizingId, setOptimizingId] = useState<string | null>(null);
 
@@ -158,15 +158,42 @@ export default function ExperienceStep() {
                     <h3 className="text-base font-bold text-primary">Tanggung Jawab & Pencapaian</h3>
                     <AIBadge>STAR Method Ready</AIBadge>
                   </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-9 px-4 rounded-xl border-dashed"
-                    onClick={() => addBullet(exp.id)}
-                    leftIcon={<Plus className="w-4 h-4" />}
-                  >
-                    Tambah Poin
-                  </Button>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-9 px-4 rounded-xl border-dashed text-ai-700 hover:bg-ai-50"
+                      onClick={async () => {
+                        const { generateExperienceBullets } = await import('@/lib/generateExperience');
+                        const suggested = generateExperienceBullets(exp.jobTitle, language);
+                        suggested.forEach(text => {
+                          const bid = crypto.randomUUID();
+                          addBullet(exp.id);
+                          // We need a small delay because addBullet is async in state
+                          setTimeout(() => {
+                             const state = useCVStore.getState();
+                             const currentExp = state.experiences.find(e => e.id === exp.id);
+                             if (currentExp) {
+                               const lastBullet = currentExp.bullets[currentExp.bullets.length - 1];
+                               updateBullet(exp.id, lastBullet.id, text);
+                             }
+                          }, 10);
+                        });
+                      }}
+                      leftIcon={<Sparkles className="w-3.5 h-3.5" />}
+                    >
+                      Smart Suggest
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-9 px-4 rounded-xl border-dashed"
+                      onClick={() => addBullet(exp.id)}
+                      leftIcon={<Plus className="w-4 h-4" />}
+                    >
+                      Tambah Poin
+                    </Button>
+                  </div>
                 </div>
 
                 <div className="space-y-4">

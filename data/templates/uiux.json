@@ -1,0 +1,36 @@
+{
+  "role": {
+    "en": "UI/UX Designer",
+    "id": "Desainer UI/UX"
+  },
+  "summaries": {
+    "en": [
+      "User-centric {role} with expertise in designing intuitive and engaging digital experiences. Skilled in {skills} and dedicated to iterative design based on user research.",
+      "Creative {role} with a strong background in wireframing and prototyping using {keywords}. Committed to building aesthetically pleasing and functional products.",
+      "Experienced {role} with proficiency in {skills}. Passionate about design systems and ensuring consistency across digital platforms."
+    ],
+    "id": [
+      "{role} yang berpusat pada pengguna dengan keahlian dalam merancang pengalaman digital yang intuitif dan menarik. Mahir dalam {skills} dan berdedikasi pada desain iteratif berdasarkan riset pengguna.",
+      "{role} kreatif dengan latar belakang kuat dalam pembuatan wireframe dan prototipe menggunakan {keywords}. Berkomitmen membangun produk yang estetis dan fungsional.",
+      "{role} berpengalaman dengan kemahiran dalam {skills}. Bersemangat tentang design system dan memastikan konsistensi di seluruh platform digital."
+    ]
+  },
+  "experiences": {
+    "en": [
+      "Designed and prototyped user interfaces using {skills}, resulting in a 20% increase in user engagement.",
+      "Conducted user research and usability testing using {keywords} to inform design decisions.",
+      "Developed and maintained comprehensive design systems to ensure visual consistency.",
+      "Collaborated with developers and product managers to translate requirements into functional designs.",
+      "Created high-fidelity mockups and interactive prototypes for web and mobile applications."
+    ],
+    "id": [
+      "Merancang dan membuat prototipe antarmuka pengguna menggunakan {skills}, menghasilkan peningkatan 20% dalam keterlibatan pengguna.",
+      "Melakukan riset pengguna dan pengujian kegunaan menggunakan {keywords} untuk menginformasikan keputusan desain.",
+      "Mengembangkan dan memelihara design system yang komprehensif untuk memastikan konsistensi visual.",
+      "Berkolaborasi dengan developer dan product manager untuk menerjemahkan kebutuhan menjadi desain fungsional.",
+      "Membuat mockup high-fidelity dan prototipe interaktif untuk aplikasi web dan mobile."
+    ]
+  },
+  "skills": ["Figma", "Adobe XD", "Sketch", "User Research", "Wireframing", "Prototyping", "Design Systems", "Usability Testing"],
+  "ats_keywords": ["UI/UX Design", "User Experience Strategy", "Visual Design", "Interaction Design", "User Research", "Information Architecture"]
+}

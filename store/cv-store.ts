@@ -58,6 +58,7 @@ interface CVStoreState {
 
   // UI State
   currentStep: BuilderStep;
+  language: 'id' | 'en';
   isInitialized: boolean;
 
   // AI State
@@ -109,6 +110,7 @@ interface CVStoreState {
 
   // Actions — Navigation
   setCurrentStep: (step: BuilderStep) => void;
+  setLanguage: (lang: 'id' | 'en') => void;
   goToNextStep: () => void;
   goToPrevStep: () => void;
 
@@ -144,6 +146,7 @@ export const useCVStore = create<CVStoreState>()(
       certifications: [],
       professionalSummary: '',
       currentStep: 1,
+      language: 'id',
       isInitialized: true,
       aiStatus: 'idle',
       aiProgress: 0,
@@ -311,6 +314,10 @@ export const useCVStore = create<CVStoreState>()(
         set((state) => {
           state.currentStep = step;
         }),
+      setLanguage: (lang) =>
+        set((state) => {
+          state.language = lang;
+        }),
       goToNextStep: () =>
         set((state) => {
           if (state.currentStep < 5) {
@@ -448,6 +455,7 @@ export const useCVStore = create<CVStoreState>()(
         certifications: state.certifications,
         professionalSummary: state.professionalSummary,
         currentStep: state.currentStep,
+        language: state.language,
         atsScore: state.atsScore,
       }),
     }

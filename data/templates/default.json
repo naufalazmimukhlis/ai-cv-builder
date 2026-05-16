@@ -1,0 +1,36 @@
+{
+  "role": {
+    "en": "Professional",
+    "id": "Profesional"
+  },
+  "summaries": {
+    "en": [
+      "Dedicated {role} with a strong commitment to excellence. Skilled in {skills} and passionate about delivering high-quality results.",
+      "Goal-oriented {role} with expertise in {keywords}. Dedicated to continuous improvement and achieving organizational success.",
+      "Professional {role} with proficiency in {skills}. Experienced in handling diverse responsibilities and providing clear communication."
+    ],
+    "id": [
+      "{role} yang berdedikasi dengan komitmen kuat pada keunggulan. Mahir dalam {skills} dan bersemangat untuk memberikan hasil berkualitas tinggi.",
+      "{role} yang berorientasi pada tujuan dengan keahlian dalam {keywords}. Berdedikasi pada perbaikan berkelanjutan dan mencapai kesuksesan organisasi.",
+      "{role} profesional dengan kemahiran dalam {skills}. Berpengalaman dalam menangani berbagai tanggung jawab dan memberikan komunikasi yang jelas."
+    ]
+  },
+  "experiences": {
+    "en": [
+      "Collaborated with cross-functional teams to achieve project goals using {skills}.",
+      "Optimized internal processes and improved operational efficiency using {keywords}.",
+      "Managed diverse responsibilities and ensured timely completion of tasks.",
+      "Communicated effectively with stakeholders to ensure alignment.",
+      "Demonstrated a strong commitment to professional development."
+    ],
+    "id": [
+      "Berkolaborasi dengan tim lintas fungsi untuk mencapai tujuan proyek menggunakan {skills}.",
+      "Mengoptimalkan proses internal dan meningkatkan efisiensi operasional menggunakan {keywords}.",
+      "Mengelola berbagai tanggung jawab dan memastikan penyelesaian tugas tepat waktu.",
+      "Berkomunikasi secara efektif dengan para pemangku kepentingan untuk memastikan keselarasan.",
+      "Menunjukkan komitmen kuat terhadap pengembangan profesional."
+    ]
+  },
+  "skills": ["Communication", "Problem Solving", "Time Management", "Collaboration", "Critical Thinking"],
+  "ats_keywords": ["Professional Excellence", "Project Execution", "Communication", "Process Optimization"]
+}

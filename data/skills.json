@@ -1,0 +1,27 @@
+{
+  "frontend": {
+    "technical": ["React", "Next.js", "TypeScript", "TailwindCSS", "Redux", "GraphQL", "Performance Optimization", "Responsive Design", "Testing Library"],
+    "soft": ["Problem Solving", "Communication", "Teamwork", "Time Management", "Attention to Detail"],
+    "keywords": ["responsive design", "API integration", "component architecture", "performance optimization", "state management", "SEO", "Web Vitals"]
+  },
+  "backend": {
+    "technical": ["Node.js", "Express", "PostgreSQL", "MongoDB", "Redis", "Docker", "AWS", "Microservices", "RESTful APIs"],
+    "soft": ["Analytical Thinking", "Strategic Planning", "Leadership", "Collaboration", "Critical Thinking"],
+    "keywords": ["database design", "scalability", "security", "API development", "system architecture", "query optimization", "CI/CD"]
+  },
+  "fullstack": {
+    "technical": ["React", "Next.js", "Node.js", "PostgreSQL", "Docker", "AWS", "TypeScript", "Prisma", "Authentication"],
+    "soft": ["Adaptability", "Full Project Lifecycle", "Mentoring", "System Integration", "Agile"],
+    "keywords": ["end-to-end development", "deployment", "fullstack architecture", "database management", "frontend integration"]
+  },
+  "uiux": {
+    "technical": ["Figma", "Adobe XD", "Prototyping", "User Research", "Wireframing", "Design Systems", "Usability Testing", "Interaction Design"],
+    "soft": ["Empathy", "Creativity", "Visual Communication", "Observation", "Critical Thinking"],
+    "keywords": ["user-centric design", "accessibility", "visual identity", "prototyping", "design consistency", "user flow"]
+  },
+  "hr": {
+    "technical": ["Talent Acquisition", "Employee Relations", "Payroll Management", "HRIS", "Performance Management", "Legal Compliance", "Conflict Resolution"],
+    "soft": ["Interpersonal Skills", "Emotional Intelligence", "Negotiation", "Confidentiality", "Public Speaking"],
+    "keywords": ["hiring strategy", "onboarding", "retention", "workplace culture", "employee engagement", "training and development"]
+  }
+}

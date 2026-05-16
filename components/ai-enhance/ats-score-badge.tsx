@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { cn, getScoreColor, getScoreBgColor, getScoreLabel } from '@/lib/utils';
 import { Target } from 'lucide-react';
+import { useCVStore } from '@/store/cv-store';
 
 interface ATSScoreBadgeProps {
   score: number;
@@ -12,9 +13,10 @@ interface ATSScoreBadgeProps {
 }
 
 export function ATSScoreBadge({ score, compact = false, large = false, className }: ATSScoreBadgeProps) {
+  const language = useCVStore((s) => s.language);
   const color = getScoreColor(score);
   const bg = getScoreBgColor(score);
-  const label = getScoreLabel(score);
+  const label = getScoreLabel(score, language);
 
   if (compact) {
     return (
@@ -70,11 +72,19 @@ export function ATSScoreBadge({ score, compact = false, large = false, className
         <span className={cn('text-base font-display font-semibold', color)}>{label}</span>
         <span className="text-xs text-[#64748B] mt-0.5">ATS Match Score</span>
         <p className="text-center text-xs text-[#64748B] mt-2 max-w-[200px]">
-          {score >= 80
-            ? 'CV Anda sangat kompatibel dengan ATS. Excellent!'
-            : score >= 60
-            ? 'CV cukup baik. Ada beberapa area yang bisa ditingkatkan.'
-            : 'CV perlu peningkatan signifikan untuk lolos ATS.'}
+          {language === 'id' ? (
+            score >= 80
+              ? 'CV Anda sangat kompatibel dengan ATS. Excellent!'
+              : score >= 60
+              ? 'CV cukup baik. Ada beberapa area yang bisa ditingkatkan.'
+              : 'CV perlu peningkatan signifikan untuk lolos ATS.'
+          ) : (
+            score >= 80
+              ? 'Your CV is highly ATS compatible. Excellent!'
+              : score >= 60
+              ? 'Good CV. Some areas can be improved for better matching.'
+              : 'Significant improvements needed for ATS compatibility.'
+          )}
         </p>
       </div>
     );

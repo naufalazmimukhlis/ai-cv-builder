@@ -7,29 +7,6 @@ import type { CVData, AIEnhancementResult } from '@/types/cv';
 
 export const maxDuration = 30;
 
-// Fallback result when AI fails
-function buildFallbackResult(cvData: CVData): AIEnhancementResult {
-  return {
-    professionalSummary: cvData.professionalSummary || 
-      `Profesional berpengalaman dengan background di ${cvData.target.jobTitle}. Memiliki keahlian di ${cvData.skills.technical.slice(0, 3).join(', ')} dan berkomitmen untuk memberikan kontribusi terbaik.`,
-    enhancedExperiences: cvData.experiences.map((exp) => ({
-      id: exp.id,
-      bullets: exp.bullets.map((b) => b.text).filter(Boolean),
-    })),
-    prioritizedSkills: cvData.skills,
-    atsScore: 60,
-    improvements: [
-      'Tambahkan lebih banyak keywords dari job description',
-      'Kuantifikasi pencapaian dengan angka dan metrik',
-      'Gunakan action verbs yang kuat di setiap bullet point',
-    ],
-    tips: [
-      'Pastikan semua keywords dari JD muncul di CV Anda',
-      'Tambahkan ringkasan profesional yang relevan dengan posisi target',
-    ],
-  };
-}
-
 export async function POST(request: NextRequest) {
   // Rate limiting
   const ip = getClientIP(request);
@@ -43,17 +20,13 @@ export async function POST(request: NextRequest) {
 
   // Validate API key
   const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY;
-  if (!apiKey) {
-    return NextResponse.json(
-      { error: 'Konfigurasi AI tidak tersedia.' },
-      { status: 503 }
-    );
-  }
 
   let cvData: CVData;
+  let lang: 'id' | 'en' = 'en';
   try {
-    const body = await request.json() as { cvData: CVData };
+    const body = await request.json() as { cvData: CVData, lang?: 'id' | 'en' };
     cvData = body.cvData;
+    lang = body.lang || 'en';
 
     if (!cvData?.personal?.fullName) {
       return NextResponse.json(
@@ -63,6 +36,36 @@ export async function POST(request: NextRequest) {
     }
   } catch {
     return NextResponse.json({ error: 'Request tidak valid.' }, { status: 400 });
+  }
+
+  // Prepare Local Results
+  const { calculateATSScore, getATSFeedback } = await import('@/lib/calculateATS');
+  const { generateSummary } = await import('@/lib/generateSummary');
+  
+  const localAtsScore = calculateATSScore(cvData);
+  const localFeedback = getATSFeedback(localAtsScore, lang);
+  const localSummary = generateSummary(cvData, lang);
+
+  const localResult: AIEnhancementResult = {
+    professionalSummary: localSummary,
+    enhancedExperiences: cvData.experiences.map((exp) => ({
+      id: exp.id,
+      bullets: exp.bullets.map((b) => b.text).filter(Boolean),
+    })),
+    prioritizedSkills: cvData.skills,
+    atsScore: localAtsScore,
+    improvements: localFeedback,
+    tips: lang === 'id' ? [
+      'Gunakan generator lokal untuk hasil cepat dan stabil.',
+      'Tambahkan lebih banyak angka pencapaian di pengalaman kerja.',
+    ] : [
+      'Use local generator for fast and stable results.',
+      'Add more metrics and numbers in your work experience.',
+    ],
+  };
+
+  if (!apiKey) {
+    return NextResponse.json({ result: localResult, isLocal: true });
   }
 
   try {
@@ -77,14 +80,15 @@ export async function POST(request: NextRequest) {
     });
 
     const prompt = buildEnhancementPrompt(cvData);
-    const result = await model.generateContent(prompt);
+    const promptWithLang = `${prompt}\n\nIMPORTANT: ALL text fields in the JSON response (summary, bullets, improvements, tips) MUST be in ${lang === 'id' ? 'Bahasa Indonesia' : 'English'}.`;
+    
+    const result = await model.generateContent(promptWithLang);
     const text = result.response.text();
 
     const parsed = parseAIJSON<AIEnhancementResult>(text);
 
     if (!parsed || typeof parsed.atsScore !== 'number') {
-      // Return fallback if parsing fails
-      return NextResponse.json({ result: buildFallbackResult(cvData) });
+      return NextResponse.json({ result: localResult, isLocal: true });
     }
 
     // Validate and sanitize the result
@@ -119,13 +123,13 @@ export async function POST(request: NextRequest) {
       tips: Array.isArray(parsed.tips) ? parsed.tips.map(String).slice(0, 3) : [],
     };
 
-    return NextResponse.json({ result: safeResult });
+    return NextResponse.json({ result: safeResult, isLocal: false });
   } catch (err) {
     console.error('AI ERROR [Full CV Enhancement]:', err);
-    // Graceful fallback with error info
     return NextResponse.json({ 
-      result: buildFallbackResult(cvData),
-      warning: 'AI Optimization partially failed. Using fallback enhancement.'
+      result: localResult,
+      isLocal: true,
+      warning: 'AI Optimization failed. Using local generator.'
     });
   }
 }

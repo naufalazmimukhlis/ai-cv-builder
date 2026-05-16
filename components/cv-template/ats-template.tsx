@@ -4,6 +4,7 @@ import * as React from 'react';
 import { useCVStore } from '@/store/cv-store';
 import { formatDateRange } from '@/lib/utils';
 import type { CVData } from '@/types/cv';
+import translations from '@/data/translations.json';
 
 interface ATSTemplateProps {
   data?: Partial<CVData>;
@@ -12,6 +13,8 @@ interface ATSTemplateProps {
 
 export function ATSTemplate({ data, className }: ATSTemplateProps) {
   const store = useCVStore();
+  const lang = store.language || 'id';
+  const t = (translations as any)[lang];
 
   const cvData: Partial<CVData> = data || {
     personal: store.personal,
@@ -35,8 +38,8 @@ export function ATSTemplate({ data, className }: ATSTemplateProps) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
           </div>
-          <p className="text-sm font-medium text-[#1A2332]">Pratinjau CV Anda</p>
-          <p className="text-xs text-[#64748B] mt-1">Mulai mengisi formulir untuk melihat CV Anda</p>
+          <p className="text-sm font-medium text-[#1A2332]">{t.empty_preview}</p>
+          <p className="text-xs text-[#64748B] mt-1">{t.empty_preview_desc}</p>
         </div>
       </div>
     );
@@ -75,10 +78,8 @@ export function ATSTemplate({ data, className }: ATSTemplateProps) {
 
       {/* Professional Summary */}
       {professionalSummary && (
-        <div>
-          <div className="cv-section-title">RINGKASAN PROFESIONAL</div>
-          <hr className="cv-section-divider" />
-          <p style={{ fontSize: '10pt', color: '#222', lineHeight: 1.6 }}>
+        <div style={{ marginBottom: '16px' }}>
+          <p style={{ fontSize: '10pt', color: '#333', lineHeight: 1.5, textAlign: 'justify', whiteSpace: 'pre-line' }}>
             {professionalSummary}
           </p>
         </div>
@@ -87,7 +88,7 @@ export function ATSTemplate({ data, className }: ATSTemplateProps) {
       {/* Work Experience */}
       {experiences && experiences.length > 0 && (
         <div>
-          <div className="cv-section-title">PENGALAMAN KERJA</div>
+          <div className="cv-section-title">{t.experience.toUpperCase()}</div>
           <hr className="cv-section-divider" />
           {experiences.map((exp) => (
             <div key={exp.id} style={{ marginBottom: '10px' }}>
@@ -99,7 +100,8 @@ export function ATSTemplate({ data, className }: ATSTemplateProps) {
                     exp.startYear,
                     exp.endMonth,
                     exp.endYear,
-                    exp.isCurrent
+                    exp.isCurrent,
+                    lang
                   )}
                 </span>
               </div>
@@ -125,7 +127,7 @@ export function ATSTemplate({ data, className }: ATSTemplateProps) {
       {skills && (
         Object.values(skills).some((arr) => arr.length > 0) && (
           <div>
-            <div className="cv-section-title">KEAHLIAN</div>
+            <div className="cv-section-title">{t.skills.toUpperCase()}</div>
             <hr className="cv-section-divider" />
             {skills.technical.length > 0 && (
               <div className="cv-skills-row">
@@ -147,7 +149,7 @@ export function ATSTemplate({ data, className }: ATSTemplateProps) {
             )}
             {skills.languages.length > 0 && (
               <div className="cv-skills-row">
-                <span className="cv-skills-label">Bahasa: </span>
+                <span className="cv-skills-label">{t.languages}: </span>
                 {skills.languages.join(', ')}
               </div>
             )}
@@ -158,7 +160,7 @@ export function ATSTemplate({ data, className }: ATSTemplateProps) {
       {/* Education */}
       {education && education.length > 0 && (
         <div>
-          <div className="cv-section-title">PENDIDIKAN</div>
+          <div className="cv-section-title">{t.education.toUpperCase()}</div>
           <hr className="cv-section-divider" />
           {education.map((edu) => (
             <div key={edu.id} style={{ marginBottom: '8px' }}>
@@ -170,7 +172,7 @@ export function ATSTemplate({ data, className }: ATSTemplateProps) {
               </div>
               <div className="cv-exp-company">
                 {edu.institution}
-                {edu.gpa ? ` | IPK: ${edu.gpa}` : ''}
+                {edu.gpa ? ` | ${t.gpa}: ${edu.gpa}` : ''}
               </div>
             </div>
           ))}
@@ -180,7 +182,7 @@ export function ATSTemplate({ data, className }: ATSTemplateProps) {
       {/* Certifications */}
       {certifications && certifications.length > 0 && (
         <div>
-          <div className="cv-section-title">SERTIFIKASI</div>
+          <div className="cv-section-title">{t.certifications.toUpperCase()}</div>
           <hr className="cv-section-divider" />
           {certifications.map((cert) => (
             <div key={cert.id} style={{ marginBottom: '4px' }}>

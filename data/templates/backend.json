@@ -1,0 +1,36 @@
+{
+  "role": {
+    "en": "Backend Developer",
+    "id": "Backend Developer"
+  },
+  "summaries": {
+    "en": [
+      "Detail-oriented {role} specialized in building scalable and secure server-side applications. Proficient in {skills} and dedicated to database optimization.",
+      "Technical {role} with a strong background in architecting RESTful APIs and microservices using {keywords}. Committed to building robust backend systems.",
+      "Experienced {role} with expertise in {skills}. Passionate about designing efficient data structures and ensuring system reliability."
+    ],
+    "id": [
+      "{role} yang berorientasi pada detail, spesialis dalam membangun aplikasi sisi server yang skalabel dan aman. Mahir dalam {skills} dan berdedikasi pada optimasi database.",
+      "{role} teknis dengan latar belakang kuat dalam merancang API RESTful dan microservices menggunakan {keywords}. Berkomitmen membangun sistem backend yang kokoh.",
+      "{role} berpengalaman dengan keahlian dalam {skills}. Bersemangat merancang struktur data yang efisien dan memastikan keandalan sistem."
+    ]
+  },
+  "experiences": {
+    "en": [
+      "Architected and implemented scalable backend services using {skills}, handling high-traffic volume.",
+      "Designed and optimized database schemas using {keywords}, improving query performance by 40%.",
+      "Integrated third-party APIs and services to extend application functionality.",
+      "Collaborated with frontend developers to define and implement efficient API contracts.",
+      "Implemented security best practices and data protection measures for backend systems."
+    ],
+    "id": [
+      "Merancang dan mengimplementasikan layanan backend yang skalabel menggunakan {skills}, menangani volume trafik tinggi.",
+      "Merancang dan mengoptimalkan skema database menggunakan {keywords}, meningkatkan performa query sebesar 40%.",
+      "Mengintegrasikan API dan layanan pihak ketiga untuk memperluas fungsionalitas aplikasi.",
+      "Berkolaborasi dengan developer frontend untuk menentukan dan menerapkan kontrak API yang efisien.",
+      "Menerapkan praktik terbaik keamanan dan langkah-langkah perlindungan data untuk sistem backend."
+    ]
+  },
+  "skills": ["Node.js", "Express", "PostgreSQL", "MongoDB", "Redis", "Docker", "AWS", "Go", "Python", "Prisma"],
+  "ats_keywords": ["Backend Development", "Database Design", "Scalability", "Security", "Microservices", "RESTful APIs", "System Architecture"]
+}

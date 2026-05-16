@@ -1,0 +1,36 @@
+{
+  "role": {
+    "en": "Frontend Developer",
+    "id": "Frontend Developer"
+  },
+  "summaries": {
+    "en": [
+      "Professional {role} with expertise in building responsive and high-performance web applications. Skilled in {skills} and dedicated to delivering clean, maintainable code.",
+      "Result-oriented {role} with a deep understanding of modern frontend technologies. Experienced in optimizing web applications for maximum speed and scalability using {keywords}.",
+      "Innovative {role} passionate about creating intuitive user interfaces. Proficient in {skills} and committed to staying current with emerging web standards."
+    ],
+    "id": [
+      "{role} profesional dengan keahlian dalam membangun aplikasi web yang responsif dan berkinerja tinggi. Terampil dalam {skills} dan berdedikasi untuk menghasilkan kode yang bersih dan mudah dipelihara.",
+      "{role} yang berorientasi pada hasil dengan pemahaman mendalam tentang teknologi frontend modern. Berpengalaman dalam mengoptimalkan aplikasi web untuk kecepatan dan skalabilitas maksimum menggunakan {keywords}.",
+      "{role} inovatif yang bersemangat menciptakan antarmuka pengguna yang intuitif. Mahir dalam {skills} dan berkomitmen untuk terus mengikuti standar web terbaru."
+    ]
+  },
+  "experiences": {
+    "en": [
+      "Developed and maintained responsive web applications using {skills}, ensuring seamless user experiences.",
+      "Collaborated with cross-functional teams to translate UI/UX designs into high-quality code using {keywords}.",
+      "Optimized frontend performance resulting in a 30% reduction in page load times.",
+      "Integrated RESTful APIs and managed application state using modern libraries.",
+      "Conducted thorough code reviews and implemented automated testing to ensure quality."
+    ],
+    "id": [
+      "Mengembangkan dan memelihara aplikasi web yang responsif menggunakan {skills}, memastikan pengalaman pengguna yang mulus.",
+      "Berkolaborasi dengan tim lintas fungsi untuk menerjemahkan desain UI/UX menjadi kode berkualitas tinggi menggunakan {keywords}.",
+      "Mengoptimalkan kinerja frontend yang menghasilkan pengurangan 30% dalam waktu pemuatan halaman.",
+      "Mengintegrasikan API RESTful dan mengelola state aplikasi menggunakan library modern.",
+      "Melakukan tinjauan kode secara menyeluruh dan menerapkan pengujian otomatis untuk memastikan kualitas."
+    ]
+  },
+  "skills": ["React.js", "Next.js", "TypeScript", "Tailwind CSS", "JavaScript (ES6+)", "Git", "Redux", "Zustand"],
+  "ats_keywords": ["Frontend Development", "Responsive Design", "Web Performance Optimization", "Cross-Browser Compatibility", "SPA", "Modern Web Standards"]
+}

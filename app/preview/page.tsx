@@ -7,9 +7,11 @@ import { PDFExportButton } from '@/components/pdf-export-button';
 import { Button } from '@/components/ui/button';
 import { useCVStore } from '@/store/cv-store';
 import { ATSScoreBadge } from '@/components/ai-enhance/ats-score-badge';
+import { cn } from '@/lib/utils';
 
 export default function PreviewPage() {
   const atsScore = useCVStore((s) => s.atsScore);
+  const language = useCVStore((s) => s.language);
 
   return (
     <div className="min-h-screen bg-surface">
@@ -29,6 +31,26 @@ export default function PreviewPage() {
           </div>
 
           <div className="flex items-center gap-3">
+            <div className="flex items-center bg-surface-2 rounded-lg p-1 border border-border mr-2">
+              <button
+                onClick={() => useCVStore.getState().setLanguage('id')}
+                className={cn(
+                  "px-3 py-1 rounded-md text-xs font-bold transition-all",
+                  language === 'id' ? "bg-white text-primary shadow-sm" : "text-[#64748B] hover:text-primary"
+                )}
+              >
+                ID
+              </button>
+              <button
+                onClick={() => useCVStore.getState().setLanguage('en')}
+                className={cn(
+                  "px-3 py-1 rounded-md text-xs font-bold transition-all",
+                  language === 'en' ? "bg-white text-primary shadow-sm" : "text-[#64748B] hover:text-primary"
+                )}
+              >
+                EN
+              </button>
+            </div>
             {atsScore !== null && (
               <div className="hidden sm:block">
                 <ATSScoreBadge score={atsScore} compact />

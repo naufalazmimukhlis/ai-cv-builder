@@ -1,0 +1,36 @@
+{
+  "role": {
+    "en": "Finance Specialist",
+    "id": "Spesialis Keuangan"
+  },
+  "summaries": {
+    "en": [
+      "Analytical {role} with expertise in financial reporting and budget management. Skilled in {skills} and dedicated to ensuring fiscal accuracy and compliance.",
+      "Detail-oriented {role} with a strong background in financial analysis and forecasting using {keywords}. Committed to driving financial stability.",
+      "Experienced {role} with proficiency in {skills}. Passionate about process improvement and strategic financial planning."
+    ],
+    "id": [
+      "{role} analitis dengan keahlian dalam pelaporan keuangan dan manajemen anggaran. Mahir dalam {skills} dan berdedikasi untuk memastikan akurasi dan kepatuhan fiskal.",
+      "{role} yang berorientasi pada detail dengan latar belakang kuat dalam analisis keuangan dan peramalan menggunakan {keywords}. Berkomitmen mendorong stabilitas keuangan.",
+      "{role} berpengalaman dengan kemahiran dalam {skills}. Bersemangat tentang perbaikan proses dan perencanaan keuangan strategis."
+    ]
+  },
+  "experiences": {
+    "en": [
+      "Managed financial operations and budget planning using {skills}, ensuring fiscal health.",
+      "Conducted detailed financial analysis and reporting using {keywords}, providing strategic insights.",
+      "Oversaw account reconciliation and financial statement preparation ensuring accuracy.",
+      "Developed and implemented financial controls to mitigate risk and ensure compliance.",
+      "Collaborated with department heads to manage budgets and optimize resource allocation."
+    ],
+    "id": [
+      "Mengelola operasional keuangan dan perencanaan anggaran menggunakan {skills}, memastikan kesehatan fiskal.",
+      "Melakukan analisis dan pelaporan keuangan terperinci menggunakan {keywords}, memberikan wawasan strategis.",
+      "Mengawasi rekonsiliasi akun dan penyusunan laporan keuangan untuk memastikan akurasi.",
+      "Mengembangkan dan menerapkan pengendalian keuangan untuk memitigasi risiko dan memastikan kepatuhan.",
+      "Berkolaborasi dengan kepala departemen untuk mengelola anggaran dan mengoptimalkan alokasi sumber daya."
+    ]
+  },
+  "skills": ["Financial Analysis", "Accounting", "Excel (VBA)", "SAP", "Budgeting", "Risk Management", "Compliance"],
+  "ats_keywords": ["Financial Management", "Fiscal Reporting", "Auditing", "Strategic Planning", "Forecasting", "Data Analysis"]
+}

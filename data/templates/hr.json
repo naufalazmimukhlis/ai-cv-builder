@@ -1,0 +1,36 @@
+{
+  "role": {
+    "en": "HR Specialist",
+    "id": "Spesialis HR"
+  },
+  "summaries": {
+    "en": [
+      "People-oriented {role} with expertise in talent acquisition and employee relations. Skilled in {skills} and dedicated to building a positive workplace culture.",
+      "Strategic {role} with a strong background in performance management and HR compliance using {keywords}. Committed to driving organizational growth.",
+      "Experienced {role} with proficiency in {skills}. Passionate about employee development and improving operational efficiency."
+    ],
+    "id": [
+      "{role} yang berorientasi pada orang dengan keahlian dalam akuisisi talenta dan hubungan karyawan. Mahir dalam {skills} dan berdedikasi membangun budaya kerja yang positif.",
+      "{role} strategis dengan latar belakang kuat dalam manajemen kinerja dan kepatuhan HR menggunakan {keywords}. Berkomitmen mendorong pertumbuhan organisasi.",
+      "{role} berpengalaman dengan kemahiran dalam {skills}. Bersemangat dalam pengembangan karyawan dan meningkatkan efisiensi operasional."
+    ]
+  },
+  "experiences": {
+    "en": [
+      "Led talent acquisition initiatives using {skills}, reducing time-to-hire by 25%.",
+      "Managed employee relations and conflict resolution using {keywords}, improving overall employee satisfaction.",
+      "Developed and implemented performance management systems to align with company goals.",
+      "Oversaw payroll administration and benefit programs ensuring accuracy and compliance.",
+      "Designed and delivered employee training programs to enhance skills and productivity."
+    ],
+    "id": [
+      "Memimpin inisiatif akuisisi talenta menggunakan {skills}, mengurangi waktu rekrutmen sebesar 25%.",
+      "Mengelola hubungan karyawan dan resolusi konflik menggunakan {keywords}, meningkatkan kepuasan karyawan secara keseluruhan.",
+      "Mengembangkan dan menerapkan sistem manajemen kinerja untuk selaras dengan tujuan perusahaan.",
+      "Mengawasi administrasi penggajian dan program tunjangan untuk memastikan akurasi dan kepatuhan.",
+      "Merancang dan menyampaikan program pelatihan karyawan untuk meningkatkan keterampilan dan produktivitas."
+    ]
+  },
+  "skills": ["Talent Acquisition", "Employee Relations", "Payroll", "HRIS", "Labor Law", "Performance Management", "Onboarding"],
+  "ats_keywords": ["Human Resources", "Recruitment Strategy", "Employee Engagement", "Conflict Resolution", "Policy Development", "Training & Development"]
+}

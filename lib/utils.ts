@@ -7,7 +7,6 @@ export function cn(...inputs: ClassValue[]) {
 
 /**
  * Generate ATS-safe PDF filename from full name
- * "Budi Santoso" → "Budi-Santoso_cv-ats.pdf"
  */
 export function generatePDFFilename(fullName: string): string {
   const safeName = fullName
@@ -32,7 +31,7 @@ export function sanitizeInput(input: string): string {
 }
 
 /**
- * Sanitize for AI prompts (strip injection attempts)
+ * Sanitize for AI prompts
  */
 export function sanitizeForAI(input: string): string {
   return input
@@ -42,7 +41,7 @@ export function sanitizeForAI(input: string): string {
     .replace(/\[INST\]/gi, '')
     .replace(/\[\/INST\]/gi, '')
     .trim()
-    .substring(0, 5000); // hard cap
+    .substring(0, 5000);
 }
 
 /**
@@ -53,10 +52,12 @@ export function formatDateRange(
   startYear: string,
   endMonth: string,
   endYear: string,
-  isCurrent: boolean
+  isCurrent: boolean,
+  lang: 'id' | 'en' = 'id'
 ): string {
   const start = startMonth && startYear ? `${startMonth} ${startYear}` : startYear || '';
-  const end = isCurrent ? 'Sekarang' : endMonth && endYear ? `${endMonth} ${endYear}` : endYear || '';
+  const presentLabel = lang === 'id' ? 'Sekarang' : 'Present';
+  const end = isCurrent ? presentLabel : endMonth && endYear ? `${endMonth} ${endYear}` : endYear || '';
   if (!start) return end;
   if (!end) return start;
   return `${start} – ${end}`;
@@ -67,26 +68,19 @@ export function formatDateRange(
  */
 export function parseAIJSON<T>(text: string): T | null {
   try {
-    // Try direct parse
     return JSON.parse(text) as T;
   } catch {
-    // Try to extract JSON from markdown code blocks
     const codeBlockMatch = text.match(/```(?:json)?\s*([\s\S]*?)```/);
     if (codeBlockMatch) {
       try {
         return JSON.parse(codeBlockMatch[1]) as T;
-      } catch {
-        // ignore
-      }
+      } catch { }
     }
-    // Try to find JSON object in text
     const jsonMatch = text.match(/\{[\s\S]*\}/);
     if (jsonMatch) {
       try {
         return JSON.parse(jsonMatch[0]) as T;
-      } catch {
-        // ignore
-      }
+      } catch { }
     }
     return null;
   }
@@ -134,9 +128,16 @@ export function getScoreBgColor(score: number): string {
   return 'bg-red-50 border-red-200';
 }
 
-export function getScoreLabel(score: number): string {
-  if (score >= 80) return 'Excellent';
-  if (score >= 60) return 'Good';
-  if (score >= 40) return 'Fair';
-  return 'Needs Work';
+export function getScoreLabel(score: number, lang: 'id' | 'en' = 'id'): string {
+  if (lang === 'id') {
+    if (score >= 80) return 'Sangat Baik';
+    if (score >= 60) return 'Baik';
+    if (score >= 40) return 'Cukup';
+    return 'Butuh Perbaikan';
+  } else {
+    if (score >= 80) return 'Excellent';
+    if (score >= 60) return 'Good';
+    if (score >= 40) return 'Fair';
+    return 'Needs Work';
+  }
 }

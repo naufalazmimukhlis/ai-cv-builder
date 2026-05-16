@@ -18,9 +18,6 @@ export async function POST(request: NextRequest) {
   }
 
   const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY;
-  if (!apiKey) {
-    return NextResponse.json({ error: 'Konfigurasi AI tidak tersedia.' }, { status: 503 });
-  }
 
   let jobDescription: string;
   try {
@@ -31,6 +28,26 @@ export async function POST(request: NextRequest) {
     }
   } catch {
     return NextResponse.json({ error: 'Request tidak valid.' }, { status: 400 });
+  }
+
+  // Local fallback: simple keyword extraction
+  const words = jobDescription
+    .split(/\s+/)
+    .filter((w) => w.length > 3 && !['dan', 'dengan', 'yang', 'untuk', 'dari', 'atau'].includes(w.toLowerCase()))
+    .map(w => w.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,""))
+    .slice(0, 30);
+  
+  const localKeywords = {
+    required_skills: words.slice(0, 8),
+    preferred_skills: words.slice(8, 12),
+    tools: words.slice(12, 16),
+    soft_skills: ['Communication', 'Teamwork', 'Problem Solving'].slice(0, 3),
+    keywords: words.slice(16, 25),
+    isLocal: true
+  };
+
+  if (!apiKey) {
+    return NextResponse.json(localKeywords);
   }
 
   try {
@@ -49,18 +66,7 @@ export async function POST(request: NextRequest) {
     const parsed = parseAIJSON<AIKeywordResult>(text);
 
     if (!parsed) {
-      // Fallback: simple keyword extraction
-      const words = jobDescription
-        .split(/\s+/)
-        .filter((w) => w.length > 3)
-        .slice(0, 20);
-      return NextResponse.json({
-        required_skills: words.slice(0, 5),
-        preferred_skills: [],
-        tools: [],
-        soft_skills: [],
-        keywords: words.slice(5),
-      });
+      return NextResponse.json(localKeywords);
     }
 
     return NextResponse.json({
@@ -69,12 +75,13 @@ export async function POST(request: NextRequest) {
       tools: (parsed.tools || []).slice(0, 10),
       soft_skills: (parsed.soft_skills || []).slice(0, 8),
       keywords: (parsed.keywords || []).slice(0, 15),
+      isLocal: false
     });
   } catch (err) {
     console.error('AI ERROR [Keyword Extraction]:', err);
     return NextResponse.json({ 
-      error: 'Gagal mengekstrak keywords dari Job Description.',
-      details: err instanceof Error ? err.message : 'Unknown AI error'
-    }, { status: 500 });
+      ...localKeywords,
+      error: 'AI Error, menggunakan ekstraksi lokal.'
+    });
   }
 }

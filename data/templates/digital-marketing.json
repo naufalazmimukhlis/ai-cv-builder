@@ -1,0 +1,17 @@
+{
+  "role": "Digital Marketing Specialist",
+  "summaries": [
+    "Strategic {role} with expertise in SEO, SEM, and social media marketing. Skilled in {skills} and dedicated to driving brand awareness and customer engagement.",
+    "Results-driven {role} with a strong background in data-driven marketing campaigns and performance tracking using {keywords}. Passionate about achieving growth targets.",
+    "Creative {role} with proficiency in {skills}. Experienced in developing and executing comprehensive digital marketing strategies across multiple channels."
+  ],
+  "experiences": [
+    "Developed and executed comprehensive digital marketing campaigns to increase brand visibility and generate leads using {skills}.",
+    "Optimized website content and structure for search engines (SEO) to improve organic search rankings and drive traffic using {keywords}.",
+    "Managed and optimized paid search (SEM) and social media advertising campaigns to achieve maximum ROI.",
+    "Analyzed marketing performance metrics and adjusted strategies based on data-driven insights to improve campaign effectiveness.",
+    "Collaborated with creative teams to develop compelling marketing assets, including social media content, email newsletters, and landing pages."
+  ],
+  "skills": ["SEO", "SEM", "Google Analytics", "Social Media Marketing", "Email Marketing", "Content Strategy", "PPC Advertising", "Copywriting", "Market Research", "Marketing Automation"],
+  "ats_keywords": ["Digital Marketing", "Search Engine Optimization", "Search Engine Marketing", "Performance Marketing", "Social Media Strategy", "Growth Hacking", "Content Marketing"]
+}

@@ -15,29 +15,46 @@ export async function POST(request: NextRequest) {
   }
 
   const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY;
-  if (!apiKey) {
-    return NextResponse.json({ error: 'Konfigurasi AI tidak tersedia.' }, { status: 503 });
-  }
 
   let bullet: string;
   let jobTitle: string;
   let keywords: string[];
+  let lang: 'id' | 'en' = 'en';
 
   try {
     const body = await request.json() as {
       bullet: string;
       jobTitle: string;
       keywords: string[];
+      lang?: 'id' | 'en';
     };
     bullet = sanitizeForAI(body.bullet || '');
     jobTitle = sanitizeForAI(body.jobTitle || 'Profesional');
     keywords = Array.isArray(body.keywords) ? body.keywords.slice(0, 15) : [];
+    lang = body.lang || 'en';
 
     if (!bullet || bullet.length < 5) {
       return NextResponse.json({ error: 'Bullet point terlalu singkat.' }, { status: 400 });
     }
   } catch {
     return NextResponse.json({ error: 'Request tidak valid.' }, { status: 400 });
+  }
+
+  // Local optimization fallback
+  const { en: enVerbs, id: idVerbs } = await import('@/data/action-verbs.json');
+  const actionVerbs = lang === 'id' ? idVerbs : enVerbs;
+  const verb = actionVerbs[Math.floor(Math.random() * actionVerbs.length)];
+  
+  const localOptimized = bullet.toLowerCase().startsWith(verb.toLowerCase().substring(0, 5))
+    ? bullet
+    : `${verb} ${bullet.toLowerCase().replace(/^(saya|kami|tim|i|we)\s/i, '')}`;
+
+  if (!apiKey) {
+    return NextResponse.json({
+      optimized: localOptimized,
+      explanation: lang === 'id' ? 'Optimasi lokal: Menggunakan kata kerja aktif.' : 'Local optimization: Using action verbs for impact.',
+      isLocal: true
+    });
   }
 
   try {
@@ -51,33 +68,31 @@ export async function POST(request: NextRequest) {
     });
 
     const prompt = buildBulletOptimizerPrompt(bullet, jobTitle, keywords);
-    const result = await model.generateContent(prompt);
+    const promptWithLang = `${prompt}\n\nIMPORTANT: The output MUST be in ${lang === 'id' ? 'Bahasa Indonesia' : 'English'}.`;
+    
+    const result = await model.generateContent(promptWithLang);
     const text = result.response.text();
     const parsed = parseAIJSON<AIBulletResult>(text);
 
     if (!parsed?.optimized) {
-      console.warn('[AI WARNING]: Bullet point optimization returned malformed JSON or empty result.');
-      // Fallback: prefix with an action verb if missing
-      const actionVerbs = ['Developed', 'Implemented', 'Spearheaded', 'Optimized', 'Orchestrated'];
-      const verb = actionVerbs[Math.floor(Math.random() * actionVerbs.length)];
-      const improved = bullet.startsWith(verb.slice(0, 5))
-        ? bullet
-        : `${verb} ${bullet.toLowerCase().replace(/^(saya|kami|tim)\s/i, '')}`;
       return NextResponse.json({
-        optimized: improved,
-        explanation: 'AI fallback: Action verb added for better impact.',
+        optimized: localOptimized,
+        explanation: 'AI fallback: Optimasi lokal digunakan.',
+        isLocal: true
       });
     }
 
     return NextResponse.json({
       optimized: String(parsed.optimized).substring(0, 500),
       explanation: String(parsed.explanation || '').substring(0, 300),
+      isLocal: false
     });
   } catch (err) {
     console.error('AI ERROR [Bullet Optimization]:', err);
     return NextResponse.json({ 
-      error: 'Gagal mengoptimalkan bullet point. Pastikan API Key valid dan coba lagi.',
-      details: err instanceof Error ? err.message : 'Unknown AI error'
-    }, { status: 500 });
+      optimized: localOptimized,
+      explanation: 'AI Error, menggunakan optimasi lokal.',
+      isLocal: true
+    });
   }
 }

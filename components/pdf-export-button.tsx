@@ -18,6 +18,7 @@ export function PDFExportButton() {
   const education = useCVStore((s) => s.education);
   const certifications = useCVStore((s) => s.certifications);
   const professionalSummary = useCVStore((s) => s.professionalSummary);
+  const language = useCVStore((s) => s.language);
 
   const cvData = React.useMemo(() => ({
     personal,
@@ -36,15 +37,14 @@ export function PDFExportButton() {
   if (!mounted) {
     return (
       <Button variant="warm" size="lg" disabled leftIcon={<Download className="w-4 h-4" />}>
-        Memuat...
+        {language === 'id' ? 'Memuat...' : 'Loading...'}
       </Button>
     );
   }
 
   const filename = `${cvData.personal.fullName
-    .trim()
-    .replace(/\s+/g, '-')
-    .replace(/[^a-zA-Z0-9-]/g, '')}_cv-ats.pdf`;
+    ? cvData.personal.fullName.trim().replace(/\s+/g, '-').replace(/[^a-zA-Z0-9-]/g, '')
+    : 'cv'}_cv-ats.pdf`;
 
   const handleDownload = async () => {
     try {
@@ -52,7 +52,7 @@ export function PDFExportButton() {
       // Dinamis import untuk menghindari SSR issues
       const { pdf } = await import('@react-pdf/renderer');
       
-      const blob = await pdf(<ATSTemplatePDF data={cvData} />).toBlob();
+      const blob = await pdf(<ATSTemplatePDF data={cvData} lang={language} />).toBlob();
       const url = URL.createObjectURL(blob);
       
       const link = document.createElement('a');
@@ -79,7 +79,9 @@ export function PDFExportButton() {
       leftIcon={<Download className="w-4 h-4" />}
       className="w-full sm:w-auto shadow-button hover:shadow-button-hover font-semibold"
     >
-      {isGenerating ? 'Membuat PDF...' : 'Unduh PDF (ATS Ready)'}
+      {isGenerating 
+        ? (language === 'id' ? 'Membuat PDF...' : 'Generating PDF...') 
+        : (language === 'id' ? 'Unduh PDF (ATS Ready)' : 'Download PDF (ATS Ready)')}
     </Button>
   );
 }

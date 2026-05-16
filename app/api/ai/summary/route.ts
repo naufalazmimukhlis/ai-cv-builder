@@ -15,16 +15,23 @@ export async function POST(request: NextRequest) {
   }
 
   const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY;
-  if (!apiKey) {
-    return NextResponse.json({ error: 'Konfigurasi AI tidak tersedia.' }, { status: 503 });
-  }
-
+  
   let cvData: Partial<CVData>;
+  let lang: 'id' | 'en' = 'en';
   try {
-    const body = await request.json() as { cvData: Partial<CVData> };
+    const body = await request.json() as { cvData: Partial<CVData>, lang?: 'id' | 'en' };
     cvData = body.cvData || {};
+    lang = body.lang || 'en';
   } catch {
     return NextResponse.json({ error: 'Request tidak valid.' }, { status: 400 });
+  }
+
+  // Use local generator
+  const { generateSummary } = await import('@/lib/generateSummary');
+  const localSummary = generateSummary(cvData, lang);
+
+  if (!apiKey) {
+    return NextResponse.json({ summary: localSummary, isLocal: true });
   }
 
   try {
@@ -38,23 +45,28 @@ export async function POST(request: NextRequest) {
     });
 
     const prompt = buildSummaryPrompt(cvData);
-    const result = await model.generateContent(prompt);
+    // Add language instruction to prompt if needed, 
+    // but the buildSummaryPrompt should ideally handle it or we append it here.
+    const promptWithLang = `${prompt}\n\nIMPORTANT: The output MUST be in ${lang === 'id' ? 'Bahasa Indonesia' : 'English'}.`;
+    
+    const result = await model.generateContent(promptWithLang);
     const text = result.response.text();
     const parsed = parseAIJSON<AISummaryResult>(text);
 
     if (!parsed?.summary) {
-      const fallback = `Profesional berpengalaman dengan keahlian di ${cvData.target?.jobTitle || 'bidang ini'}. Memiliki kemampuan yang kuat dalam ${(cvData.skills?.technical || []).slice(0, 3).join(', ')} dan berkomitmen untuk memberikan hasil terbaik bagi organisasi.`;
-      return NextResponse.json({ summary: fallback });
+      return NextResponse.json({ summary: localSummary, isLocal: true });
     }
 
     return NextResponse.json({
       summary: String(parsed.summary).substring(0, 800),
+      isLocal: false
     });
   } catch (err) {
     console.error('AI ERROR [Summary Generation]:', err);
     return NextResponse.json({ 
-      error: 'Gagal membuat professional summary.',
-      details: err instanceof Error ? err.message : 'Unknown AI error'
-    }, { status: 500 });
+      summary: localSummary, 
+      isLocal: true,
+      error: 'Gagal menggunakan AI, beralih ke generator lokal.'
+    });
   }
 }

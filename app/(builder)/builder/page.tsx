@@ -10,12 +10,14 @@ import { useCVStore } from '@/store/cv-store';
 import { personalInfoSchema, type PersonalInfoFormData } from '@/lib/validators';
 import { useAIEnhance } from '@/hooks/use-ai-enhance';
 import { useState } from 'react';
+import translations from '@/data/translations.json';
 
 export default function PersonalInfoStep() {
   const router = useRouter();
-  const { personal, updatePersonal } = useCVStore();
+  const { personal, updatePersonal, language } = useCVStore();
   const { generateSummary } = useAIEnhance();
   const [isGeneratingSummary, setIsGeneratingSummary] = useState(false);
+  const t = (translations as any)[language];
 
   const handleGenerateSummary = async () => {
     setIsGeneratingSummary(true);
@@ -152,12 +154,12 @@ export default function PersonalInfoStep() {
               {isGeneratingSummary ? (
                 <>
                   <div className="w-3.5 h-3.5 border-2 border-ai border-t-transparent rounded-full animate-spin" />
-                  AI Menulis...
+                  {language === 'id' ? 'AI Menulis...' : 'AI Writing...'}
                 </>
               ) : (
                 <>
                   <Sparkles className="w-3.5 h-3.5 text-ai" />
-                  <span className="z-10">✨ Generate Ringkasan AI</span>
+                  <span className="z-10">✨ {t.generate_summary} AI</span>
                 </>
               )}
             </button>
