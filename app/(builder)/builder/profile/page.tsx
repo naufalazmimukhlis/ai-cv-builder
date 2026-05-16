@@ -5,7 +5,7 @@ import { Sparkles, Info, ArrowLeft, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCVStore } from '@/store/cv-store';
 import { useAIEnhance } from '@/hooks/use-ai-enhance';
-import { Translation, TranslationsSchema } from '@/types/cv';
+import { TranslationsSchema } from '@/types/cv';
 import { useState } from 'react';
 import translations from '@/data/translations.json';
 

@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { ClipboardList, Sparkles, Download, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCVStore } from '@/store/cv-store';
-import { Translation, TranslationsSchema } from '@/types/cv';
+import { TranslationsSchema } from '@/types/cv';
 import translations from '@/data/translations.json';
 
 const STEPS = [

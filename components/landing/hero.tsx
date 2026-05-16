@@ -6,7 +6,7 @@ import { ArrowRight, Sparkles, CheckCircle, Zap, Target, Shield } from 'lucide-r
 import { Button } from '@/components/ui/button';
 import { useCVStore } from '@/store/cv-store';
 import { cn } from '@/lib/utils';
-import { Translation, TranslationsSchema } from '@/types/cv';
+import { TranslationsSchema } from '@/types/cv';
 import translations from '@/data/translations.json';
 
 export function LandingHero() {

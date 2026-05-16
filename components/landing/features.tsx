@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Cpu, Target, FileText, Download, Sparkles, TrendingUp, Zap } from 'lucide-react';
 import { useCVStore } from '@/store/cv-store';
 import translations from '@/data/translations.json';
-import { Translation, TranslationsSchema } from '@/types/cv';
+import { TranslationsSchema } from '@/types/cv';
 
 const FEATURES = [
   {
