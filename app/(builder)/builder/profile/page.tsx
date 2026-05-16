@@ -5,6 +5,7 @@ import { Sparkles, Info, ArrowLeft, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCVStore } from '@/store/cv-store';
 import { useAIEnhance } from '@/hooks/use-ai-enhance';
+import { Translation, TranslationsSchema } from '@/types/cv';
 import { useState } from 'react';
 import translations from '@/data/translations.json';
 
@@ -13,7 +14,7 @@ export default function ProfessionalProfileStep() {
   const { language, setSummary } = useCVStore();
   const { generateSummary, isLoading } = useAIEnhance();
   const [isGenerating, setIsGenerating] = useState(false);
-  const t = (translations as any)[language];
+  const t = (translations as unknown as TranslationsSchema)[language as 'id' | 'en'];
 
   const handleGenerateSummary = async () => {
     try {

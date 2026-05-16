@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useCVStore } from '@/store/cv-store';
 import { formatDateRange } from '@/lib/utils';
-import type { CVData } from '@/types/cv';
+import type { CVData, TranslationsSchema } from '@/types/cv';
 import translations from '@/data/translations.json';
 
 interface ATSTemplateProps {
@@ -13,7 +13,7 @@ export const ATSTemplate = React.forwardRef<HTMLDivElement, ATSTemplateProps>(
   ({ data, className }, ref) => {
     const store = useCVStore();
     const lang = store.language || 'id';
-    const t = (translations as any)[lang];
+    const t = (translations as unknown as TranslationsSchema)[lang as 'id' | 'en'];
 
     const cvData: Partial<CVData> = data || {
       personal: store.personal,

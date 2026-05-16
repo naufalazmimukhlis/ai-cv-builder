@@ -4,11 +4,12 @@ import Link from 'next/link';
 import { Sparkles, Heart, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCVStore } from '@/store/cv-store';
+import { TranslationsSchema } from '@/types/cv';
 import translations from '@/data/translations.json';
 
 export function LandingFooter() {
   const language = useCVStore((s) => s.language) || 'id';
-  const lt = (translations as any).landing[language];
+  const lt = (translations as unknown as TranslationsSchema).landing[language as 'id' | 'en'];
 
   return (
     <>

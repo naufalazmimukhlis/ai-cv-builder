@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Plus, Trash2, ArrowLeft, ArrowRight, GripVertical, Sparkles, TrendingUp, Info } from 'lucide-react';
+import { Plus, Trash2, ArrowLeft, ArrowRight, GripVertical, Sparkles } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';

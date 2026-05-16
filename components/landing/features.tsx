@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Cpu, Target, FileText, Download, Sparkles, TrendingUp, Zap } from 'lucide-react';
 import { useCVStore } from '@/store/cv-store';
 import translations from '@/data/translations.json';
+import { Translation, TranslationsSchema } from '@/types/cv';
 
 const FEATURES = [
   {
@@ -72,7 +73,7 @@ const itemVariants = {
 
 export function LandingFeatures() {
   const language = useCVStore((s) => s.language) || 'id';
-  const lt = (translations as any)?.landing?.[language] || {};
+  const lt = (translations as unknown as TranslationsSchema).landing[language as 'id' | 'en'];
 
   return (
     <section id="features" className="py-20 px-6 lg:px-12 bg-surface-2" aria-labelledby="features-title">
@@ -116,7 +117,7 @@ export function LandingFeatures() {
           viewport={{ once: true, margin: '-40px' }}
           className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
-          {(lt?.feature_list || []).map((feature: any, index: number) => {
+          {(lt?.feature_list || []).map((feature: { title: string; desc: string }, index: number) => {
             const Icon = FEATURES[index].icon;
             const color = FEATURES[index].color;
             const bg = FEATURES[index].bg;

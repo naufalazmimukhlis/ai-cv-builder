@@ -8,12 +8,10 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useCVStore } from '@/store/cv-store';
 import { personalInfoSchema, type PersonalInfoFormData } from '@/lib/validators';
-import translations from '@/data/translations.json';
 
 export default function PersonalInfoStep() {
   const router = useRouter();
   const { personal, updatePersonal, language } = useCVStore();
-  const t = (translations as any)[language];
 
   const {
     register,

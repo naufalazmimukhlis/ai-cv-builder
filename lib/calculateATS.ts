@@ -1,6 +1,5 @@
 import { CVData } from '@/types/cv';
 import actionVerbs from '../data/action-verbs.json';
-import skillsDb from '../data/skills.json';
 
 export interface ATSResult {
   score: number;
@@ -14,7 +13,7 @@ export function calculateATSScore(cvData: Partial<CVData>): ATSResult {
   let score = 0;
   const feedback: { id: string, en: string }[] = [];
 
-  const { personal, target, experiences, skills, education, professionalSummaryId, professionalSummaryEn } = cvData;
+  const { personal, experiences, skills, education, professionalSummaryId, professionalSummaryEn } = cvData;
 
   // 1. Basic Info (15 pts)
   if (personal?.fullName) score += 5;

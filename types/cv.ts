@@ -133,3 +133,56 @@ export interface AIEnhancementState {
 
 export type BuilderStep = 1 | 2 | 3 | 4 | 5 | 6;
 export type FormStatus = 'idle' | 'dirty' | 'valid' | 'submitting';
+
+export interface Translation {
+  summary: string;
+  experience: string;
+  education: string;
+  skills: string;
+  certifications: string;
+  contact: string;
+  present: string;
+  loading: string;
+  generate_summary: string;
+  ats_score: string;
+  back_to_edit: string;
+  preview_title: string;
+  tips_title: string;
+  adjust_keywords: string;
+  empty_preview: string;
+  empty_preview_desc: string;
+  technical_skills: string;
+  soft_skills: string;
+  languages: string;
+  gpa: string;
+}
+
+export interface LandingTranslation {
+  hero_title: string;
+  hero_subtitle: string;
+  hero_desc: string;
+  benefits: string[];
+  cta_start: string;
+  cta_how: string;
+  stats: Record<string, string>;
+  features_badge: string;
+  features_title: string;
+  features_desc: string;
+  feature_list: Array<{ title: string; desc: string }>;
+  how_title: string;
+  how_desc: string;
+  how_steps: Array<{ title: string; desc: string; detail: string }>;
+  cta_footer: string;
+  no_registration: string;
+  footer_tagline: string;
+  [key: string]: any;
+}
+
+export interface TranslationsSchema {
+  id: Translation;
+  en: Translation;
+  landing: {
+    id: LandingTranslation;
+    en: LandingTranslation;
+  };
+}

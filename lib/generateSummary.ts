@@ -7,14 +7,22 @@ import financeTemplates from '../data/templates/finance.json';
 import customerServiceTemplates from '../data/templates/customer-service.json';
 import defaultTemplates from '../data/templates/default.json';
 
-const allTemplates: Record<string, any> = {
-  frontend: frontendTemplates,
-  backend: backendTemplates,
-  uiux: uiuxTemplates,
-  marketing: digitalMarketingTemplates,
-  finance: financeTemplates,
-  'customer-service': customerServiceTemplates,
-  default: defaultTemplates,
+interface CVTemplate {
+  role: { en: string; id: string };
+  summaries: { en: string[]; id: string[] };
+  experiences: { en: string[]; id: string[] };
+  skills: string[];
+  ats_keywords: string[];
+}
+
+const allTemplates: Record<string, CVTemplate> = {
+  frontend: frontendTemplates as CVTemplate,
+  backend: backendTemplates as CVTemplate,
+  uiux: uiuxTemplates as CVTemplate,
+  marketing: digitalMarketingTemplates as unknown as CVTemplate,
+  finance: financeTemplates as CVTemplate,
+  'customer-service': customerServiceTemplates as CVTemplate,
+  default: defaultTemplates as CVTemplate,
 };
 
 /**

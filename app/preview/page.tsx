@@ -11,10 +11,12 @@ import { ATSScoreBadge } from '@/components/ai-enhance/ats-score-badge';
 import { cn } from '@/lib/utils';
 import translations from '@/data/translations.json';
 
+import { TranslationsSchema } from '@/types/cv';
+
 export default function PreviewPage() {
   const atsScore = useCVStore((s) => s.atsScore);
   const language = useCVStore((s) => s.language);
-  const t = (translations as any)[language];
+  const t = (translations as unknown as TranslationsSchema)[language as 'id' | 'en'];
   const resumeRef = React.useRef<HTMLDivElement>(null);
 
   return (

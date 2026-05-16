@@ -6,11 +6,12 @@ import { ArrowRight, Sparkles, CheckCircle, Zap, Target, Shield } from 'lucide-r
 import { Button } from '@/components/ui/button';
 import { useCVStore } from '@/store/cv-store';
 import { cn } from '@/lib/utils';
+import { Translation, TranslationsSchema } from '@/types/cv';
 import translations from '@/data/translations.json';
 
 export function LandingHero() {
   const language = useCVStore((s) => s.language) || 'id';
-  const lt = (translations as any)?.landing?.[language] || {};
+  const lt = (translations as unknown as TranslationsSchema).landing[language as 'id' | 'en'];
 
   const stats = [
     { value: '10,000+', label: lt?.stats?.created || 'CVs' },

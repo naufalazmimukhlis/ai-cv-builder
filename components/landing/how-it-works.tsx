@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { ClipboardList, Sparkles, Download, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCVStore } from '@/store/cv-store';
+import { Translation, TranslationsSchema } from '@/types/cv';
 import translations from '@/data/translations.json';
 
 const STEPS = [
@@ -45,7 +46,7 @@ const STEPS = [
 
 export function LandingHowItWorks() {
   const language = useCVStore((s) => s.language) || 'id';
-  const lt = (translations as any)?.landing?.[language] || {};
+  const lt = (translations as unknown as TranslationsSchema).landing[language as 'id' | 'en'];
 
   return (
     <section id="how-it-works" className="py-20 px-6 lg:px-12 bg-white" aria-labelledby="how-title">
@@ -79,7 +80,7 @@ export function LandingHowItWorks() {
           <div className="hidden md:block absolute top-8 left-1/3 w-1/3 h-0.5 bg-gradient-to-r from-accent/30 to-ai/30" aria-hidden="true" />
           <div className="hidden md:block absolute top-8 left-2/3 w-1/3 h-0.5 bg-gradient-to-r from-ai/30 to-success/30" aria-hidden="true" />
 
-          {(lt?.how_steps || []).map((step: any, index: number) => {
+          {(lt?.how_steps || []).map((step, index: number) => {
             const Icon = STEPS[index].icon;
             const color = STEPS[index].color;
             const bg = STEPS[index].bg;
