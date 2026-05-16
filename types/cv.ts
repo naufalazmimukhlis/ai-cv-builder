@@ -1,5 +1,5 @@
 // ============================================================
-// ATS CV Builder Pro — Core TypeScript Types
+// AI CV Builder — Core TypeScript Types (Bilingual Support)
 // ============================================================
 
 export interface PersonalInfo {
@@ -26,13 +26,15 @@ export interface TargetJob {
 
 export interface BulletPoint {
   id: string;
-  text: string;
+  textId: string;    // Indonesian version
+  textEn: string;    // English version
   aiOptimized?: boolean;
 }
 
 export interface Experience {
   id: string;
-  jobTitle: string;
+  jobTitleId: string; // Bilingual job title
+  jobTitleEn: string;
   company: string;
   location: string;
   startMonth: string;
@@ -52,8 +54,10 @@ export interface Skills {
 
 export interface Education {
   id: string;
-  degree: string;
-  major: string;
+  degreeId: string;
+  degreeEn: string;
+  majorId: string;
+  majorEn: string;
   institution: string;
   graduationYear: string;
   gpa: string;
@@ -61,7 +65,8 @@ export interface Education {
 
 export interface Certification {
   id: string;
-  name: string;
+  nameId: string;
+  nameEn: string;
   issuer: string;
   year: string;
 }
@@ -73,7 +78,8 @@ export interface CVData {
   skills: Skills;
   education: Education[];
   certifications: Certification[];
-  professionalSummary: string;
+  professionalSummaryId: string;
+  professionalSummaryEn: string;
 }
 
 // AI Related Types
@@ -86,21 +92,25 @@ export interface AIKeywordResult {
 }
 
 export interface AIBulletResult {
-  optimized: string;
+  optimizedId: string;
+  optimizedEn: string;
   explanation: string;
 }
 
 export interface AISummaryResult {
-  summary: string;
+  summaryId: string;
+  summaryEn: string;
 }
 
 export interface AIEnhancedExperience {
   id: string;
-  bullets: string[];
+  bulletsId: string[];
+  bulletsEn: string[];
 }
 
 export interface AIEnhancementResult {
-  professionalSummary: string;
+  professionalSummaryId: string;
+  professionalSummaryEn: string;
   enhancedExperiences: AIEnhancedExperience[];
   prioritizedSkills: {
     technical: string[];
@@ -109,7 +119,7 @@ export interface AIEnhancementResult {
     languages: string[];
   };
   atsScore: number;
-  improvements: string[];
+  improvements: string[]; // These will be selected based on language by UI
   tips: string[];
 }
 
@@ -121,16 +131,5 @@ export interface AIEnhancementState {
   error: string | null;
 }
 
-// Diff types for before/after comparison
-export interface SectionDiff {
-  section: string;
-  label: string;
-  before: string;
-  after: string;
-  accepted: boolean;
-}
-
-// Form Step
-export type BuilderStep = 1 | 2 | 3 | 4 | 5;
-
+export type BuilderStep = 1 | 2 | 3 | 4 | 5 | 6;
 export type FormStatus = 'idle' | 'dirty' | 'valid' | 'submitting';

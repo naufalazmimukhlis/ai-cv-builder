@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowRight, Sparkles, CheckCircle, Zap, Target, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useCVStore } from '@/store/cv-store';
+import { cn } from '@/lib/utils';
 
 const STATS = [
   { value: '10,000+', label: 'CV dibuat' },
@@ -12,6 +14,7 @@ const STATS = [
 ];
 
 export function LandingHero() {
+  const language = useCVStore((s) => s.language);
   return (
     <section className="relative min-h-screen flex flex-col hero-gradient" aria-label="Hero section">
       {/* Navbar */}
@@ -24,11 +27,37 @@ export function LandingHero() {
           <span className="text-xs font-semibold text-accent bg-accent/10 px-2 py-0.5 rounded-full border border-accent/20">Pro</span>
         </div>
         <div className="hidden md:flex items-center gap-6">
-          <a href="#features" className="text-sm text-[#64748B] hover:text-primary transition-colors font-medium">Fitur</a>
-          <a href="#how-it-works" className="text-sm text-[#64748B] hover:text-primary transition-colors font-medium">Cara Kerja</a>
+          <a href="#features" className="text-sm text-[#64748B] hover:text-primary transition-colors font-medium">
+            {language === 'id' ? 'Fitur' : 'Features'}
+          </a>
+          <a href="#how-it-works" className="text-sm text-[#64748B] hover:text-primary transition-colors font-medium">
+            {language === 'id' ? 'Cara Kerja' : 'How it Works'}
+          </a>
+          
+          <div className="flex items-center bg-white/50 backdrop-blur-sm rounded-xl p-1 border border-border shadow-sm">
+            <button
+              onClick={() => useCVStore.getState().setLanguage('id')}
+              className={cn(
+                "px-3 py-1 rounded-lg text-xs font-bold transition-all duration-300",
+                language === 'id' ? "bg-primary text-white shadow-md" : "text-[#64748B] hover:text-primary"
+              )}
+            >
+              ID
+            </button>
+            <button
+              onClick={() => useCVStore.getState().setLanguage('en')}
+              className={cn(
+                "px-3 py-1 rounded-lg text-xs font-bold transition-all duration-300",
+                language === 'en' ? "bg-primary text-white shadow-md" : "text-[#64748B] hover:text-primary"
+              )}
+            >
+              EN
+            </button>
+          </div>
+
           <Link href="/builder" id="nav-cta">
             <Button variant="primary" size="sm">
-              Mulai Gratis
+              {language === 'id' ? 'Mulai Gratis' : 'Start Free'}
             </Button>
           </Link>
         </div>

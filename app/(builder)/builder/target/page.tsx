@@ -9,13 +9,13 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { TagInput } from '@/components/ui/tag-input';
 import { useCVStore } from '@/store/cv-store';
-import { useAIEnhance } from '@/hooks/use-ai-enhance';
 import { targetJobSchema, type TargetJobFormData } from '@/lib/validators';
 import { ATSIntelligencePanel } from '@/components/ai-enhance/ats-intelligence-panel';
+import { useAIEnhance } from '@/hooks/use-ai-enhance';
 
 export default function TargetPositionStep() {
   const router = useRouter();
-  const { target, updateTarget } = useCVStore();
+  const { target, updateTarget, language } = useCVStore();
   const { extractKeywords, isLoading } = useAIEnhance();
 
   const {
@@ -33,10 +33,13 @@ export default function TargetPositionStep() {
   const jobDescription = watch('jobDescription');
 
   const handleExtractKeywords = async () => {
-    if (!jobDescription || jobDescription.length < 20) return;
+    if (!jobDescription || jobDescription.length < 10) return;
+    
     const keywords = await extractKeywords(jobDescription);
     if (keywords.length > 0) {
-      setValue('keywords', keywords, { shouldValidate: true });
+      setValue("keywords", keywords, {
+        shouldValidate: true,
+      });
     }
   };
 
@@ -54,14 +57,18 @@ export default function TargetPositionStep() {
               1
             </div>
             <div>
-              <h2 className="text-lg font-bold text-primary">Informasi Pekerjaan</h2>
-              <p className="text-xs text-[#64748B]">Beri tahu AI posisi apa yang Anda incar.</p>
+              <h2 className="text-lg font-bold text-primary">
+                {language === 'id' ? 'Informasi Pekerjaan' : 'Job Information'}
+              </h2>
+              <p className="text-xs text-[#64748B]">
+                {language === 'id' ? 'Beri tahu AI posisi apa yang Anda incar.' : 'Tell AI what position you are targeting.'}
+              </p>
             </div>
           </div>
 
           <div className="space-y-6">
             <Input
-              label="Judul Posisi (Job Title)"
+              label={language === 'id' ? 'Judul Posisi (Job Title)' : 'Job Title'}
               placeholder="mis. Senior Product Designer"
               {...register('jobTitle')}
               error={errors.jobTitle?.message}
@@ -70,21 +77,25 @@ export default function TargetPositionStep() {
 
             <div className="space-y-2">
               <Textarea
-                label="Job Description (Opsional)"
-                placeholder="Paste deskripsi pekerjaan dari LinkedIn/Jobstreet di sini agar AI bisa menganalisis keywords penting."
+                label={language === 'id' ? 'Job Description (Opsional)' : 'Job Description (Optional)'}
+                placeholder={language === 'id' 
+                  ? "Paste deskripsi pekerjaan dari LinkedIn/Jobstreet di sini..." 
+                  : "Paste job description from LinkedIn/Jobstreet here..."}
                 {...register('jobDescription')}
                 error={errors.jobDescription?.message}
                 rows={6}
                 className="bg-surface-2 focus:bg-white transition-all"
-                hint="Makin lengkap JD yang dimasukkan, makin akurat optimasi AI."
+                hint={language === 'id' 
+                  ? "Makin lengkap JD yang dimasukkan, makin akurat optimasi AI." 
+                  : "The more complete the JD, the more accurate the AI optimization."}
               />
               <div className="flex justify-end mt-4">
                 <button
                   type="button"
                   onClick={handleExtractKeywords}
-                  disabled={!jobDescription || jobDescription.length < 20 || isLoading}
+                  disabled={!jobDescription || jobDescription.length < 10 || isLoading}
                   className={`text-xs font-bold px-5 py-2.5 rounded-xl flex items-center gap-2 transition-all relative overflow-hidden group shadow-sm ${
-                    !jobDescription || jobDescription.length < 20 
+                    !jobDescription || jobDescription.length < 10 
                       ? 'text-[#64748B] bg-surface-2 cursor-not-allowed border border-border' 
                       : 'text-ai-700 bg-ai-50 border border-ai-200 hover:bg-ai-100 hover:shadow-md'
                   }`}
@@ -92,13 +103,13 @@ export default function TargetPositionStep() {
                   {isLoading ? (
                     <>
                       <div className="w-3.5 h-3.5 border-2 border-ai border-t-transparent rounded-full animate-spin" />
-                      Menganalisis Job Description...
+                      {language === 'id' ? 'Menganalisis Job Description...' : 'Analyzing Job Description...'}
                     </>
                   ) : (
                     <>
                       <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/60 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />
                       <Sparkles className="w-3.5 h-3.5 text-ai" />
-                      <span className="z-10">✨ Analisis ATS & Ekstrak Keywords</span>
+                      <span className="z-10">✨ {language === 'id' ? 'Analisis ATS & Ekstrak Keywords' : 'ATS Analysis & Extract Keywords'}</span>
                     </>
                   )}
                 </button>
@@ -113,8 +124,12 @@ export default function TargetPositionStep() {
               2
             </div>
             <div>
-              <h2 className="text-lg font-bold text-primary">Keywords Target</h2>
-              <p className="text-xs text-[#64748B]">Keywords yang wajib muncul di CV Anda.</p>
+              <h2 className="text-lg font-bold text-primary">
+                {language === 'id' ? 'Keywords Target' : 'Target Keywords'}
+              </h2>
+              <p className="text-xs text-[#64748B]">
+                {language === 'id' ? 'Keywords yang wajib muncul di CV Anda.' : 'Keywords that must appear in your CV.'}
+              </p>
             </div>
           </div>
 
@@ -127,8 +142,10 @@ export default function TargetPositionStep() {
                 value={field.value}
                 onChange={field.onChange}
                 error={errors.keywords?.message}
-                placeholder="Ketik keyword lalu tekan Enter..."
-                hint="AI akan menyisipkan kata-kata ini ke dalam pengalaman kerja Anda."
+                placeholder={language === 'id' ? "Ketik keyword lalu tekan Enter..." : "Type keyword and press Enter..."}
+                hint={language === 'id' 
+                  ? "AI akan menyisipkan kata-kata ini ke dalam pengalaman kerja Anda." 
+                  : "AI will insert these words into your work experience."}
               />
             )}
           />
@@ -148,7 +165,7 @@ export default function TargetPositionStep() {
               onClick={() => router.push('/builder')}
               leftIcon={<ArrowLeft className="w-4 h-4" />}
             >
-              Kembali
+              {language === 'id' ? 'Kembali' : 'Back'}
             </Button>
             <Button
               type="submit"
@@ -156,7 +173,7 @@ export default function TargetPositionStep() {
               className="flex-[2] md:flex-none md:px-12 h-12 md:h-11 rounded-xl shadow-ai"
               rightIcon={<ArrowRight className="w-4 h-4" />}
             >
-              Lanjutkan
+              {language === 'id' ? 'Lanjutkan' : 'Continue'}
             </Button>
           </div>
         </div>

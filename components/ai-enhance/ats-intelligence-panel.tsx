@@ -6,29 +6,39 @@ import { useCVStore } from '@/store/cv-store';
 import { cn } from '@/lib/utils';
 
 export function ATSIntelligencePanel() {
-  const { target, experiences, skills } = useCVStore();
-  const analysis = target.aiAnalysis;
+  const { target, experiences, skills, aiResult, language } = useCVStore();
+  
+  // Use user-defined keywords or extracted keywords from job title as target
+  const requiredKeywords = target.keywords.length > 0 
+    ? target.keywords 
+    : [target.jobTitle].filter(Boolean);
 
-  if (!analysis || (analysis.required.length === 0 && analysis.preferred.length === 0)) {
+  if (requiredKeywords.length === 0) {
     return null;
   }
 
   // Basic calculation of missing keywords (case-insensitive check)
   const allCurrentText = [
     target.jobTitle,
-    ...experiences.flatMap(e => [e.jobTitle, ...e.bullets.map(b => b.text)]),
+    ...experiences.flatMap(e => [language === 'id' ? e.jobTitleId : e.jobTitleEn, ...e.bullets.map(b => language === 'id' ? b.textId : b.textEn)]),
     ...skills.technical,
     ...skills.tools
   ].join(' ').toLowerCase();
 
-  const missingRequired = analysis.required.filter(
+  const missingRequired = requiredKeywords.filter(
     k => !allCurrentText.includes(k.toLowerCase())
   );
 
-  const matchedCount = analysis.required.length - missingRequired.length;
-  const matchPercentage = analysis.required.length > 0 
-    ? Math.round((matchedCount / analysis.required.length) * 100) 
+  const matchedCount = requiredKeywords.length - missingRequired.length;
+  const matchPercentage = requiredKeywords.length > 0 
+    ? Math.round((matchedCount / requiredKeywords.length) * 100) 
     : 0;
+
+  // Use aiResult for suggestions if available, otherwise use defaults
+  const suggestions = aiResult?.improvements || [
+    language === 'id' ? 'Tambahkan lebih banyak angka (%) di pengalaman kerja.' : 'Add more numbers (%) in work experience.',
+    language === 'id' ? 'Gunakan kata kerja aksi yang kuat.' : 'Use strong action verbs.'
+  ];
 
   return (
     <div className="mt-8 space-y-5 animate-slide-up ai-glow">
@@ -79,7 +89,7 @@ export function ATSIntelligencePanel() {
               <div className="w-8 h-8 rounded-lg bg-warning/10 flex items-center justify-center">
                 <AlertCircle className="w-4 h-4 text-warning" />
               </div>
-              Keywords Penting yang Belum Ada
+              {language === 'id' ? 'Keywords Penting yang Belum Ada' : 'Important Keywords Missing'}
             </h4>
             <span className="text-[11px] bg-warning/5 text-warning-700 border border-warning/10 px-3 py-1 rounded-full font-bold">
               {missingRequired.length} Missing
@@ -100,8 +110,8 @@ export function ATSIntelligencePanel() {
                 <div className="w-12 h-12 rounded-full bg-success/10 flex items-center justify-center">
                   <CheckCircle2 className="w-6 h-6 text-success" />
                 </div>
-                <p className="text-sm font-bold text-success">Luar Biasa!</p>
-                <p className="text-xs text-[#64748B]">Semua keyword utama sudah ada di CV Anda.</p>
+                <p className="text-sm font-bold text-success">{language === 'id' ? 'Luar Biasa!' : 'Excellent!'}</p>
+                <p className="text-xs text-[#64748B]">{language === 'id' ? 'Semua keyword utama sudah ada di CV Anda.' : 'All main keywords are in your CV.'}</p>
               </div>
             )}
           </div>
@@ -114,10 +124,10 @@ export function ATSIntelligencePanel() {
           <div className="w-8 h-8 rounded-lg bg-ai/10 flex items-center justify-center">
             <Info className="w-4 h-4 text-ai" />
           </div>
-          Saran Strategis AI
+          {language === 'id' ? 'Saran Strategis AI' : 'Strategic AI Suggestions'}
         </h4>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {analysis.suggestions.map((s, i) => (
+          {suggestions.map((s, i) => (
             <div key={i} className="flex items-start gap-3 p-3 bg-white/60 rounded-xl border border-ai-100/50">
               <div className="w-5 h-5 rounded-full bg-ai/10 flex items-center justify-center flex-shrink-0 mt-0.5">
                 <TrendingUp className="w-3 h-3 text-ai" />

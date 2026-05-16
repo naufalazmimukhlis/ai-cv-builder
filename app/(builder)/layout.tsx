@@ -14,7 +14,7 @@ import { AIBadge } from '@/components/ui/ai-badge';
 import { useState } from 'react';
 import { ToastProvider } from '@/components/ui/toast';
 
-const STEPS = ['Info Pribadi', 'Posisi', 'Pengalaman', 'Keahlian', 'Pendidikan'];
+const STEPS = ['Info Pribadi', 'Posisi', 'Pengalaman', 'Keahlian', 'Pendidikan', 'Profil'];
 
 const PATH_TO_STEP: Record<string, number> = {
   '/builder': 1,
@@ -22,6 +22,7 @@ const PATH_TO_STEP: Record<string, number> = {
   '/builder/experience': 3,
   '/builder/skills': 4,
   '/builder/education': 5,
+  '/builder/profile': 6,
 };
 
 export default function BuilderLayout({
@@ -66,7 +67,7 @@ export default function BuilderLayout({
             {/* Right actions */}
             <div className="flex items-center gap-2.5">
               <div className="hidden md:block">
-                <AIBadge>Powered by Gemini 1.5</AIBadge>
+                <AIBadge>Powered by Gemini 2.5</AIBadge>
               </div>
               {atsScore !== null && (
                 <ATSScoreBadge score={atsScore} compact />

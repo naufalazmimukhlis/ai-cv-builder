@@ -54,7 +54,8 @@ interface CVStoreState {
   skills: Skills;
   education: Education[];
   certifications: Certification[];
-  professionalSummary: string;
+  professionalSummaryId: string;
+  professionalSummaryEn: string;
 
   // UI State
   currentStep: BuilderStep;
@@ -68,7 +69,7 @@ interface CVStoreState {
   aiResult: AIEnhancementResult | null;
   aiError: string | null;
 
-  // ATS Score (from last AI run)
+  // ATS Score
   atsScore: number | null;
 
   // Actions — Personal
@@ -86,9 +87,10 @@ interface CVStoreState {
   removeExperience: (id: string) => void;
   reorderExperiences: (experiences: Experience[]) => void;
   addBullet: (experienceId: string) => void;
-  updateBullet: (experienceId: string, bulletId: string, text: string) => void;
+  updateBullet: (experienceId: string, bulletId: string, text: string, lang?: 'id' | 'en') => void;
+  updateBulletBilingual: (experienceId: string, bulletId: string, textId: string, textEn: string) => void;
   removeBullet: (experienceId: string, bulletId: string) => void;
-  optimizeBullet: (experienceId: string, bulletId: string, optimizedText: string) => void;
+  optimizeBullet: (experienceId: string, bulletId: string, optimizedId: string, optimizedEn: string) => void;
 
   // Actions — Skills
   updateSkills: (data: Partial<Skills>) => void;
@@ -106,7 +108,8 @@ interface CVStoreState {
   removeCertification: (id: string) => void;
 
   // Actions — Summary
-  setSummary: (summary: string) => void;
+  setSummary: (summary: string, lang?: 'id' | 'en') => void;
+  setSummaryBilingual: (summaryId: string, summaryEn: string) => void;
 
   // Actions — Navigation
   setCurrentStep: (step: BuilderStep) => void;
@@ -120,7 +123,6 @@ interface CVStoreState {
   setAIResult: (result: AIEnhancementResult) => void;
   setAIError: (error: string) => void;
   applyAIEnhancement: (result: AIEnhancementResult) => void;
-  applySectionDiff: (section: string, value: string) => void;
   resetAI: () => void;
 
   // Actions — Reset
@@ -144,7 +146,8 @@ export const useCVStore = create<CVStoreState>()(
       skills: defaultSkills,
       education: [],
       certifications: [],
-      professionalSummary: '',
+      professionalSummaryId: '',
+      professionalSummaryEn: '',
       currentStep: 1,
       language: 'id',
       isInitialized: true,
@@ -186,7 +189,8 @@ export const useCVStore = create<CVStoreState>()(
         set((state) => {
           const newExp: Experience = {
             id: generateId(),
-            jobTitle: '',
+            jobTitleId: '',
+            jobTitleEn: '',
             company: '',
             location: '',
             startMonth: '',
@@ -194,7 +198,7 @@ export const useCVStore = create<CVStoreState>()(
             endMonth: '',
             endYear: '',
             isCurrent: false,
-            bullets: [{ id: generateId(), text: '', aiOptimized: false }],
+            bullets: [{ id: generateId(), textId: '', textEn: '', aiOptimized: false }],
           };
           state.experiences.push(newExp);
         }),
@@ -215,15 +219,30 @@ export const useCVStore = create<CVStoreState>()(
         set((state) => {
           const exp = state.experiences.find((e) => e.id === experienceId);
           if (exp) {
-            exp.bullets.push({ id: generateId(), text: '', aiOptimized: false });
+            exp.bullets.push({ id: generateId(), textId: '', textEn: '', aiOptimized: false });
           }
         }),
-      updateBullet: (experienceId, bulletId, text) =>
+      updateBullet: (experienceId, bulletId, text, lang) =>
         set((state) => {
           const exp = state.experiences.find((e) => e.id === experienceId);
           if (exp) {
             const bullet = exp.bullets.find((b) => b.id === bulletId);
-            if (bullet) bullet.text = text;
+            if (bullet) {
+              const currentLang = lang || state.language;
+              if (currentLang === 'id') bullet.textId = text;
+              else bullet.textEn = text;
+            }
+          }
+        }),
+      updateBulletBilingual: (experienceId, bulletId, textId, textEn) =>
+        set((state) => {
+          const exp = state.experiences.find((e) => e.id === experienceId);
+          if (exp) {
+            const bullet = exp.bullets.find((b) => b.id === bulletId);
+            if (bullet) {
+              bullet.textId = textId;
+              bullet.textEn = textEn;
+            }
           }
         }),
       removeBullet: (experienceId, bulletId) =>
@@ -233,13 +252,14 @@ export const useCVStore = create<CVStoreState>()(
             exp.bullets = exp.bullets.filter((b) => b.id !== bulletId);
           }
         }),
-      optimizeBullet: (experienceId, bulletId, optimizedText) =>
+      optimizeBullet: (experienceId, bulletId, optimizedId, optimizedEn) =>
         set((state) => {
           const exp = state.experiences.find((e) => e.id === experienceId);
           if (exp) {
             const bullet = exp.bullets.find((b) => b.id === bulletId);
             if (bullet) {
-              bullet.text = optimizedText;
+              bullet.textId = optimizedId;
+              bullet.textEn = optimizedEn;
               bullet.aiOptimized = true;
             }
           }
@@ -266,8 +286,10 @@ export const useCVStore = create<CVStoreState>()(
         set((state) => {
           state.education.push({
             id: generateId(),
-            degree: '',
-            major: '',
+            degreeId: '',
+            degreeEn: '',
+            majorId: '',
+            majorEn: '',
             institution: '',
             graduationYear: '',
             gpa: '',
@@ -288,7 +310,8 @@ export const useCVStore = create<CVStoreState>()(
         set((state) => {
           state.certifications.push({
             id: generateId(),
-            name: '',
+            nameId: '',
+            nameEn: '',
             issuer: '',
             year: '',
           });
@@ -304,9 +327,16 @@ export const useCVStore = create<CVStoreState>()(
         }),
 
       // Summary
-      setSummary: (summary) =>
+      setSummary: (summary, lang) =>
         set((state) => {
-          state.professionalSummary = summary;
+          const currentLang = lang || state.language;
+          if (currentLang === 'id') state.professionalSummaryId = summary;
+          else state.professionalSummaryEn = summary;
+        }),
+      setSummaryBilingual: (summaryId, summaryEn) =>
+        set((state) => {
+          state.professionalSummaryId = summaryId;
+          state.professionalSummaryEn = summaryEn;
         }),
 
       // Navigation
@@ -320,7 +350,7 @@ export const useCVStore = create<CVStoreState>()(
         }),
       goToNextStep: () =>
         set((state) => {
-          if (state.currentStep < 5) {
+          if (state.currentStep < 6) {
             state.currentStep = (state.currentStep + 1) as BuilderStep;
           }
         }),
@@ -355,16 +385,20 @@ export const useCVStore = create<CVStoreState>()(
       applyAIEnhancement: (result) =>
         set((state) => {
           // Apply summary
-          if (result.professionalSummary) {
-            state.professionalSummary = result.professionalSummary;
+          if (result.professionalSummaryId) {
+            state.professionalSummaryId = result.professionalSummaryId;
+          }
+          if (result.professionalSummaryEn) {
+            state.professionalSummaryEn = result.professionalSummaryEn;
           }
           // Apply enhanced experiences
           result.enhancedExperiences.forEach((enhanced) => {
             const exp = state.experiences.find((e) => e.id === enhanced.id);
             if (exp) {
-              exp.bullets = enhanced.bullets.map((text) => ({
+              exp.bullets = enhanced.bulletsId.map((textId, i) => ({
                 id: generateId(),
-                text,
+                textId,
+                textEn: enhanced.bulletsEn[i] || '',
                 aiOptimized: true,
               }));
             }
@@ -375,12 +409,6 @@ export const useCVStore = create<CVStoreState>()(
           }
           state.atsScore = result.atsScore;
           state.aiStatus = 'done';
-        }),
-      applySectionDiff: (section, value) =>
-        set((state) => {
-          if (section === 'summary') {
-            state.professionalSummary = value;
-          }
         }),
       resetAI: () =>
         set((state) => {
@@ -400,7 +428,8 @@ export const useCVStore = create<CVStoreState>()(
           state.skills = defaultSkills;
           state.education = [];
           state.certifications = [];
-          state.professionalSummary = '';
+          state.professionalSummaryId = '';
+          state.professionalSummaryEn = '';
           state.currentStep = 1;
           state.aiStatus = 'idle';
           state.aiProgress = 0;
@@ -420,7 +449,8 @@ export const useCVStore = create<CVStoreState>()(
           skills: state.skills,
           education: state.education,
           certifications: state.certifications,
-          professionalSummary: state.professionalSummary,
+          professionalSummaryId: state.professionalSummaryId,
+          professionalSummaryEn: state.professionalSummaryEn,
         };
       },
       hasMinimumData: (): boolean => {
@@ -434,9 +464,8 @@ export const useCVStore = create<CVStoreState>()(
       },
     })),
     {
-      name: 'ats-cv-builder-store',
+      name: 'ats-cv-builder-store-v2', // Change name to avoid conflicts with old schema
       storage: createJSONStorage(() => {
-        // SSR-safe localStorage
         if (typeof window === 'undefined') {
           return {
             getItem: () => null,
@@ -453,7 +482,8 @@ export const useCVStore = create<CVStoreState>()(
         skills: state.skills,
         education: state.education,
         certifications: state.certifications,
-        professionalSummary: state.professionalSummary,
+        professionalSummaryId: state.professionalSummaryId,
+        professionalSummaryEn: state.professionalSummaryEn,
         currentStep: state.currentStep,
         language: state.language,
         atsScore: state.atsScore,

@@ -1,53 +1,87 @@
 import { CVData } from '@/types/cv';
-import frontendTemplate from '@/data/templates/frontend.json';
-import backendTemplate from '@/data/templates/backend.json';
-import uiuxTemplate from '@/data/templates/uiux.json';
-import hrTemplate from '@/data/templates/hr.json';
-import financeTemplate from '@/data/templates/finance.json';
-import customerServiceTemplate from '@/data/templates/customer-service.json';
-import defaultTemplate from '@/data/templates/default.json';
+import frontendTemplates from '../data/templates/frontend.json';
+import backendTemplates from '../data/templates/backend.json';
+import uiuxTemplates from '../data/templates/uiux.json';
+import digitalMarketingTemplates from '../data/templates/digital-marketing.json';
+import financeTemplates from '../data/templates/finance.json';
+import customerServiceTemplates from '../data/templates/customer-service.json';
+import defaultTemplates from '../data/templates/default.json';
 
-const templates: Record<string, any> = {
-  'frontend': frontendTemplate,
-  'backend': backendTemplate,
-  'uiux': uiuxTemplate,
-  'hr': hrTemplate,
-  'finance': financeTemplate,
-  'customer-service': customerServiceTemplate,
-  'default': defaultTemplate,
+const allTemplates: Record<string, any> = {
+  frontend: frontendTemplates,
+  backend: backendTemplates,
+  uiux: uiuxTemplates,
+  marketing: digitalMarketingTemplates,
+  finance: financeTemplates,
+  'customer-service': customerServiceTemplates,
+  default: defaultTemplates,
 };
 
-export function generateSummary(cvData: Partial<CVData>, lang: 'id' | 'en' = 'en'): string {
+/**
+ * Generates a professional summary locally based on role, skills, and experience.
+ */
+export function generateSummary(cvData: Partial<CVData>): { id: string, en: string } {
   const jobTitle = cvData.target?.jobTitle?.toLowerCase() || '';
+  const experiences = cvData.experiences || [];
+  const skills = [...(cvData.skills?.technical || []), ...(cvData.skills?.tools || [])].slice(0, 4).join(', ');
+  const keywords = (cvData.target?.keywords || []).slice(0, 3).join(', ');
   
-  let templateKey = 'default';
-  if (jobTitle.includes('frontend') || jobTitle.includes('react') || jobTitle.includes('web developer')) {
-    templateKey = 'frontend';
-  } else if (jobTitle.includes('backend') || jobTitle.includes('node') || jobTitle.includes('api')) {
-    templateKey = 'backend';
-  } else if (jobTitle.includes('ui') || jobTitle.includes('ux') || jobTitle.includes('designer')) {
-    templateKey = 'uiux';
-  } else if (jobTitle.includes('hr') || jobTitle.includes('human resource') || jobTitle.includes('recruitment')) {
-    templateKey = 'hr';
-  } else if (jobTitle.includes('finance') || jobTitle.includes('accounting') || jobTitle.includes('keuangan')) {
-    templateKey = 'finance';
-  } else if (jobTitle.includes('customer') || jobTitle.includes('service') || jobTitle.includes('support') || jobTitle.includes('layanan')) {
-    templateKey = 'customer-service';
+  // Calculate total years of experience
+  let totalYears = 0;
+  if (experiences.length > 0) {
+    const years = experiences.map(exp => {
+      const start = parseInt(exp.startYear) || new Date().getFullYear();
+      const end = exp.isCurrent ? new Date().getFullYear() : (parseInt(exp.endYear) || new Date().getFullYear());
+      return end - start;
+    });
+    totalYears = Math.max(0, Math.round(years.reduce((a, b) => a + b, 0)));
   }
 
-  const template = templates[templateKey] || defaultTemplate;
-  const summaries = template.summaries[lang] || template.summaries['en'];
-  const randomSummary = summaries[Math.floor(Math.random() * summaries.length)];
+  const expString = totalYears > 0 ? `${totalYears}+` : 'beberapa';
+  const expStringEn = totalYears > 0 ? `${totalYears}+` : 'several';
+  
+  let role = 'default';
+  if (jobTitle.includes('frontend') || jobTitle.includes('react') || jobTitle.includes('web')) role = 'frontend';
+  else if (jobTitle.includes('backend') || jobTitle.includes('node') || jobTitle.includes('java')) role = 'backend';
+  else if (jobTitle.includes('ui') || jobTitle.includes('ux') || jobTitle.includes('design')) role = 'uiux';
+  else if (jobTitle.includes('marketing') || jobTitle.includes('seo') || jobTitle.includes('social')) role = 'marketing';
+  else if (jobTitle.includes('finance') || jobTitle.includes('accountant') || jobTitle.includes('audit')) role = 'finance';
+  else if (jobTitle.includes('customer') || jobTitle.includes('service') || jobTitle.includes('support')) role = 'customer-service';
 
-  const skills = (cvData.skills?.technical || []).length > 0 
-    ? cvData.skills?.technical?.slice(0, 5).join(', ') 
-    : template.skills.slice(0, 5).join(', ');
-    
-  const keywords = template.ats_keywords.slice(0, 3).join(', ');
-  const role = typeof template.role === 'string' ? template.role : (template.role[lang] || template.role['en']);
+  const templates = allTemplates[role] || defaultTemplates;
+  
+  const summariesId = templates.summaries.id;
+  const summariesEn = templates.summaries.en;
+  
+  const randomIndex = Math.floor(Math.random() * summariesId.length);
+  
+  const templateId = summariesId[randomIndex];
+  const templateEn = summariesEn[randomIndex];
 
-  return randomSummary
-    .replace(/{role}/g, cvData.target?.jobTitle || role)
-    .replace(/{skills}/g, skills)
-    .replace(/{keywords}/g, keywords);
+  const placeholders = {
+    role: cvData.target?.jobTitle || (templates.role?.id || 'Profesional'),
+    skills: skills || 'berbagai keahlian teknis',
+    skillsEn: skills || 'various technical skills',
+    keywords: keywords || 'praktik terbaik industri',
+    keywordsEn: keywords || 'industry best practices',
+    years: expString,
+    yearsEn: expStringEn,
+  };
+
+  const replacePlaceholders = (text: string, isEn = false) => {
+    return text
+      .replace(/\[role\]/g, placeholders.role)
+      .replace(/\{role\}/g, placeholders.role)
+      .replace(/\[skills\]/g, isEn ? placeholders.skillsEn : placeholders.skills)
+      .replace(/\{skills\}/g, isEn ? placeholders.skillsEn : placeholders.skills)
+      .replace(/\[keywords\]/g, isEn ? placeholders.keywordsEn : placeholders.keywords)
+      .replace(/\{keywords\}/g, isEn ? placeholders.keywordsEn : placeholders.keywords)
+      .replace(/\[years\]/g, isEn ? placeholders.yearsEn : placeholders.years)
+      .replace(/\{years\}/g, isEn ? placeholders.yearsEn : placeholders.years);
+  };
+
+  return {
+    id: replacePlaceholders(templateId, false),
+    en: replacePlaceholders(templateEn, true)
+  };
 }

@@ -8,19 +8,22 @@ import { useCVStore } from '@/store/cv-store';
 
 export default function EducationStep() {
   const router = useRouter();
-  const { education, certifications, addEducation, updateEducation, removeEducation, addCertification, updateCertification, removeCertification } = useCVStore();
+  const { education, certifications, addEducation, updateEducation, removeEducation, addCertification, updateCertification, removeCertification, language } = useCVStore();
 
   const handleFinish = () => {
-    // Save to local storage is automatic via Zustand persistence
-    router.push('/preview');
+    router.push('/builder/profile');
   };
 
   return (
     <div className="p-6 md:p-8 max-w-3xl mx-auto animate-fade-in pb-24">
       <div className="mb-8">
-        <h1 className="text-2xl font-display font-bold text-primary mb-2">Pendidikan & Sertifikasi</h1>
+        <h1 className="text-2xl font-display font-bold text-primary mb-2">
+          {language === 'id' ? 'Pendidikan & Sertifikasi' : 'Education & Certifications'}
+        </h1>
         <p className="text-sm text-[#64748B]">
-          Langkah terakhir! Masukkan riwayat pendidikan formal dan sertifikasi profesional Anda.
+          {language === 'id' 
+            ? 'Masukkan riwayat pendidikan formal dan sertifikasi profesional Anda.'
+            : 'Enter your formal education history and professional certifications.'}
         </p>
       </div>
 
@@ -30,7 +33,7 @@ export default function EducationStep() {
           <div className="flex justify-between items-center mb-2">
             <h2 className="text-lg font-bold text-primary flex items-center gap-2">
               <div className="w-1.5 h-6 bg-primary rounded-full" />
-              Pendidikan Formal
+              {language === 'id' ? 'Pendidikan Formal' : 'Formal Education'}
             </h2>
             <Button
               variant="ghost"
@@ -39,13 +42,15 @@ export default function EducationStep() {
               onClick={() => addEducation()}
               leftIcon={<Plus className="w-4 h-4" />}
             >
-              Tambah
+              {language === 'id' ? 'Tambah' : 'Add'}
             </Button>
           </div>
 
           {education.length === 0 ? (
             <div className="text-center py-10 border-2 border-dashed border-border rounded-2xl bg-surface-2">
-              <p className="text-sm text-[#64748B]">Belum ada riwayat pendidikan yang ditambahkan.</p>
+              <p className="text-sm text-[#64748B]">
+                {language === 'id' ? 'Belum ada riwayat pendidikan yang ditambahkan.' : 'No education history added yet.'}
+              </p>
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-5">
@@ -63,26 +68,26 @@ export default function EducationStep() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <Input
-                      label="Nama Institusi"
+                      label={language === 'id' ? 'Nama Institusi' : 'Institution Name'}
                       placeholder="mis. Universitas Indonesia"
                       value={edu.institution}
                       onChange={(e) => updateEducation(edu.id, { institution: e.target.value })}
                     />
                     <Input
-                      label="Tingkat / Gelar"
+                      label={language === 'id' ? 'Tingkat / Gelar' : 'Degree / Level'}
                       placeholder="mis. Sarjana (S1)"
-                      value={edu.degree}
-                      onChange={(e) => updateEducation(edu.id, { degree: e.target.value })}
+                      value={language === 'id' ? edu.degreeId : edu.degreeEn}
+                      onChange={(e) => updateEducation(edu.id, language === 'id' ? { degreeId: e.target.value } : { degreeEn: e.target.value })}
                     />
                     <Input
-                      label="Jurusan"
+                      label={language === 'id' ? 'Jurusan' : 'Major'}
                       placeholder="mis. Teknik Informatika"
-                      value={edu.major}
-                      onChange={(e) => updateEducation(edu.id, { major: e.target.value })}
+                      value={language === 'id' ? edu.majorId : edu.majorEn}
+                      onChange={(e) => updateEducation(edu.id, language === 'id' ? { majorId: e.target.value } : { majorEn: e.target.value })}
                     />
                     <div className="grid grid-cols-2 gap-5">
                       <Input
-                        label="Tahun Lulus"
+                        label={language === 'id' ? 'Tahun Lulus' : 'Graduation Year'}
                         placeholder="mis. 2023"
                         value={edu.graduationYear}
                         onChange={(e) => updateEducation(edu.id, { graduationYear: e.target.value })}
@@ -106,7 +111,7 @@ export default function EducationStep() {
           <div className="flex justify-between items-center mb-2">
             <h2 className="text-lg font-bold text-primary flex items-center gap-2">
               <div className="w-1.5 h-6 bg-accent rounded-full" />
-              Sertifikasi & Kursus
+              {language === 'id' ? 'Sertifikasi & Kursus' : 'Certifications & Courses'}
             </h2>
             <Button
               variant="ghost"
@@ -115,7 +120,7 @@ export default function EducationStep() {
               onClick={() => addCertification()}
               leftIcon={<Plus className="w-4 h-4" />}
             >
-              Tambah
+              {language === 'id' ? 'Tambah' : 'Add'}
             </Button>
           </div>
 
@@ -134,19 +139,19 @@ export default function EducationStep() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <Input
-                    label="Nama Sertifikasi"
-                    placeholder="mis. Google UX Design Professional Certificate"
-                    value={cert.name}
-                    onChange={(e) => updateCertification(cert.id, { name: e.target.value })}
+                    label={language === 'id' ? 'Nama Sertifikasi' : 'Certification Name'}
+                    placeholder="mis. Google UX Design..."
+                    value={language === 'id' ? cert.nameId : cert.nameEn}
+                    onChange={(e) => updateCertification(cert.id, language === 'id' ? { nameId: e.target.value } : { nameEn: e.target.value })}
                   />
                   <Input
-                    label="Penerbit"
+                    label={language === 'id' ? 'Penerbit' : 'Issuer'}
                     placeholder="mis. Google / Coursera"
                     value={cert.issuer}
                     onChange={(e) => updateCertification(cert.id, { issuer: e.target.value })}
                   />
                   <Input
-                    label="Tahun"
+                    label={language === 'id' ? 'Tahun' : 'Year'}
                     placeholder="mis. 2024"
                     value={cert.year}
                     onChange={(e) => updateCertification(cert.id, { year: e.target.value })}
@@ -168,7 +173,7 @@ export default function EducationStep() {
             onClick={() => router.push('/builder/skills')}
             leftIcon={<ArrowLeft className="w-4 h-4" />}
           >
-            Kembali
+            {language === 'id' ? 'Kembali' : 'Back'}
           </Button>
           <Button
             type="button"
@@ -177,7 +182,7 @@ export default function EducationStep() {
             onClick={handleFinish}
             rightIcon={<CheckCircle className="w-4 h-4" />}
           >
-            Selesai & Review
+            {language === 'id' ? 'Lanjut ke Profil' : 'Continue to Profile'}
           </Button>
         </div>
       </div>

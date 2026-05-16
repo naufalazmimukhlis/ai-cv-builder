@@ -4,64 +4,74 @@ import * as React from 'react';
 import { Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCVStore } from '@/store/cv-store';
-import { ATSTemplatePDF } from '@/components/cv-template/ats-template-pdf';
 
-export function PDFExportButton() {
-  const [mounted, setMounted] = React.useState(false);
+interface PDFExportButtonProps {
+  resumeRef: React.RefObject<HTMLDivElement>;
+}
+
+export function PDFExportButton({ resumeRef }: PDFExportButtonProps) {
   const [isGenerating, setIsGenerating] = React.useState(false);
-  
-  // Ambil data langsung dari state individu agar equality check tidak gagal
-  const personal = useCVStore((s) => s.personal);
-  const target = useCVStore((s) => s.target);
-  const experiences = useCVStore((s) => s.experiences);
-  const skills = useCVStore((s) => s.skills);
-  const education = useCVStore((s) => s.education);
-  const certifications = useCVStore((s) => s.certifications);
-  const professionalSummary = useCVStore((s) => s.professionalSummary);
   const language = useCVStore((s) => s.language);
-
-  const cvData = React.useMemo(() => ({
-    personal,
-    target,
-    experiences,
-    skills,
-    education,
-    certifications,
-    professionalSummary,
-  }), [personal, target, experiences, skills, education, certifications, professionalSummary]);
-
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return (
-      <Button variant="warm" size="lg" disabled leftIcon={<Download className="w-4 h-4" />}>
-        {language === 'id' ? 'Memuat...' : 'Loading...'}
-      </Button>
-    );
-  }
-
-  const filename = `${cvData.personal.fullName
-    ? cvData.personal.fullName.trim().replace(/\s+/g, '-').replace(/[^a-zA-Z0-9-]/g, '')
-    : 'cv'}_cv-ats.pdf`;
+  const fullName = useCVStore((s) => s.personal.fullName);
 
   const handleDownload = async () => {
+    if (!resumeRef.current) return;
+
     try {
       setIsGenerating(true);
+
       // Dinamis import untuk menghindari SSR issues
-      const { pdf } = await import('@react-pdf/renderer');
+      const [html2canvas, { jsPDF }] = await Promise.all([
+        import('html2canvas').then((m) => m.default),
+        import('jspdf'),
+      ]);
+
+      const element = resumeRef.current;
       
-      const blob = await pdf(<ATSTemplatePDF data={cvData} lang={language} />).toBlob();
-      const url = URL.createObjectURL(blob);
+      // Setup canvas dengan resolusi tinggi
+      const canvas = await html2canvas(element, {
+        scale: 2, // Kualitas lebih tajam
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#ffffff',
+        windowWidth: element.scrollWidth,
+        windowHeight: element.scrollHeight,
+      });
+
+      const imgData = canvas.toDataURL('image/jpeg', 1.0);
       
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = filename || 'cv-ats.pdf';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+      // Ukuran A4 dalam mm
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
+      });
+
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      
+      let heightLeft = pdfHeight;
+      let position = 0;
+
+      // Halaman Pertama
+      pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, pdfHeight, undefined, 'FAST');
+      heightLeft -= pageHeight;
+
+      // Halaman Berikutnya jika panjang
+      while (heightLeft >= 0) {
+        position = heightLeft - pdfHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, pdfHeight, undefined, 'FAST');
+        heightLeft -= pageHeight;
+      }
+
+      const filename = `${fullName
+        ? fullName.trim().replace(/\s+/g, '-').replace(/[^a-zA-Z0-9-]/g, '')
+        : 'cv'}_cv-ats.pdf`;
+
+      pdf.save(filename);
     } catch (error) {
       console.error('Error generating PDF:', error);
     } finally {
@@ -74,7 +84,7 @@ export function PDFExportButton() {
       onClick={handleDownload}
       variant="warm"
       size="lg"
-      disabled={isGenerating || !cvData.personal.fullName}
+      disabled={isGenerating || !fullName}
       loading={isGenerating}
       leftIcon={<Download className="w-4 h-4" />}
       className="w-full sm:w-auto shadow-button hover:shadow-button-hover font-semibold"

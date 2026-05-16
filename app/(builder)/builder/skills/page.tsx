@@ -8,7 +8,7 @@ import { useCVStore } from '@/store/cv-store';
 
 export default function SkillsStep() {
   const router = useRouter();
-  const { skills, updateSkills, target } = useCVStore();
+  const { skills, updateSkills, target, language } = useCVStore();
 
   const handleNext = () => {
     router.push('/builder/education');
@@ -17,9 +17,13 @@ export default function SkillsStep() {
   return (
     <div className="p-6 md:p-8 max-w-2xl mx-auto animate-fade-in pb-24">
       <div className="mb-8">
-        <h1 className="text-2xl font-display font-bold text-primary mb-2">Keahlian (Skills)</h1>
+        <h1 className="text-2xl font-display font-bold text-primary mb-2">
+          {language === 'id' ? 'Keahlian (Skills)' : 'Skills'}
+        </h1>
         <p className="text-sm text-[#64748B]">
-          Masukkan keahlian yang relevan. Sistem ATS memindai bagian ini untuk mencocokkan dengan kualifikasi pekerjaan.
+          {language === 'id' 
+            ? 'Masukkan keahlian yang relevan. Sistem ATS memindai bagian ini untuk mencocokkan dengan kualifikasi pekerjaan.'
+            : 'Enter relevant skills. ATS systems scan this section to match with job qualifications.'}
         </p>
       </div>
 
@@ -32,8 +36,14 @@ export default function SkillsStep() {
                 <Lightbulb className="w-5 h-5 text-ai" />
               </div>
               <div>
-                <h3 className="text-sm font-bold text-ai-900 mb-1">Keywords Target Anda</h3>
-                <p className="text-xs text-ai-700 mb-4">Pastikan keahlian ini muncul di CV untuk meningkatkan ATS Match Score.</p>
+                <h3 className="text-sm font-bold text-ai-900 mb-1">
+                  {language === 'id' ? 'Keywords Target Anda' : 'Your Target Keywords'}
+                </h3>
+                <p className="text-xs text-ai-700 mb-4">
+                  {language === 'id' 
+                    ? 'Pastikan keahlian ini muncul di CV untuk meningkatkan ATS Match Score.'
+                    : 'Ensure these skills appear in your CV to increase ATS Match Score.'}
+                </p>
                 <div className="flex flex-wrap gap-2">
                   {target.keywords.slice(0, 15).map((kw) => (
                     <span key={kw} className="text-[11px] font-bold bg-white text-ai-700 border border-ai-200 px-3 py-1 rounded-lg shadow-sm">
@@ -41,7 +51,7 @@ export default function SkillsStep() {
                     </span>
                   ))}
                   {target.keywords.length > 15 && (
-                    <span className="text-[11px] font-bold text-ai-600 self-center">+{target.keywords.length - 15} lainnya</span>
+                    <span className="text-[11px] font-bold text-ai-600 self-center">+{target.keywords.length - 15} {language === 'id' ? 'lainnya' : 'more'}</span>
                   )}
                 </div>
               </div>
@@ -53,11 +63,13 @@ export default function SkillsStep() {
         <div className="grid grid-cols-1 gap-6 pb-32 md:pb-12">
           <section className="bg-white rounded-2xl border border-border shadow-card p-6 md:p-8 animate-slide-up [animation-delay:100ms]">
             <TagInput
-              label="Technical Skills (Hard Skills)"
+              label={language === 'id' ? 'Keahlian Teknis (Hard Skills)' : 'Technical Skills'}
               value={skills.technical}
               onChange={(tags) => updateSkills({ technical: tags })}
-              placeholder="Ketik lalu tekan Enter..."
-              hint="Keahlian teknis spesifik profesi. (mis. React, Node.js, Python, SEO, Copywriting)"
+              placeholder={language === 'id' ? "Ketik lalu tekan Enter..." : "Type and press Enter..."}
+              hint={language === 'id' 
+                ? "Keahlian teknis spesifik profesi. (mis. React, Node.js, Python, SEO)" 
+                : "Professional specific technical skills. (e.g. React, Node.js, Python, SEO)"}
               maxTags={20}
             />
           </section>
@@ -67,8 +79,10 @@ export default function SkillsStep() {
               label="Software / Tools"
               value={skills.tools}
               onChange={(tags) => updateSkills({ tools: tags })}
-              placeholder="Ketik lalu tekan Enter..."
-              hint="Perangkat lunak yang Anda kuasai. (mis. Figma, Jira, AWS, Excel, Salesforce)"
+              placeholder={language === 'id' ? "Ketik lalu tekan Enter..." : "Type and press Enter..."}
+              hint={language === 'id' 
+                ? "Perangkat lunak yang Anda kuasai. (mis. Figma, Jira, AWS, Excel)" 
+                : "Software you have mastered. (e.g. Figma, Jira, AWS, Excel)"}
               maxTags={15}
             />
           </section>
@@ -78,19 +92,23 @@ export default function SkillsStep() {
               label="Soft Skills"
               value={skills.soft}
               onChange={(tags) => updateSkills({ soft: tags })}
-              placeholder="Ketik lalu tekan Enter..."
-              hint="Kemampuan interpersonal. (mis. Leadership, Problem Solving, Communication)"
+              placeholder={language === 'id' ? "Ketik lalu tekan Enter..." : "Type and press Enter..."}
+              hint={language === 'id' 
+                ? "Kemampuan interpersonal. (mis. Leadership, Problem Solving)" 
+                : "Interpersonal abilities. (e.g. Leadership, Problem Solving)"}
               maxTags={10}
             />
           </section>
 
           <section className="bg-white rounded-2xl border border-border shadow-card p-6 md:p-8 animate-slide-up [animation-delay:250ms]">
             <TagInput
-              label="Bahasa"
+              label={language === 'id' ? 'Bahasa' : 'Languages'}
               value={skills.languages}
               onChange={(tags) => updateSkills({ languages: tags })}
-              placeholder="Ketik lalu tekan Enter..."
-              hint="Bahasa yang dikuasai. (mis. English (Fluent), Bahasa Indonesia (Native))"
+              placeholder={language === 'id' ? "Ketik lalu tekan Enter..." : "Type and press Enter..."}
+              hint={language === 'id' 
+                ? "Bahasa yang dikuasai. (mis. English (Fluent), Bahasa Indonesia (Native))" 
+                : "Languages you have mastered. (e.g. English (Fluent), Indonesian (Native))"}
               maxTags={5}
             />
           </section>
@@ -107,7 +125,7 @@ export default function SkillsStep() {
             onClick={() => router.push('/builder/experience')}
             leftIcon={<ArrowLeft className="w-4 h-4" />}
           >
-            Kembali
+            {language === 'id' ? 'Kembali' : 'Back'}
           </Button>
           <Button
             type="button"
@@ -116,7 +134,7 @@ export default function SkillsStep() {
             onClick={handleNext}
             rightIcon={<ArrowRight className="w-4 h-4" />}
           >
-            Lanjutkan
+            {language === 'id' ? 'Lanjutkan' : 'Continue'}
           </Button>
         </div>
       </div>

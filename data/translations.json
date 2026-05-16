@@ -1,6 +1,6 @@
 {
   "id": {
-    "summary": "Ringkasan Profesional",
+    "summary": "Profil",
     "experience": "Pengalaman Kerja",
     "education": "Pendidikan",
     "skills": "Keahlian",
@@ -22,7 +22,7 @@
     "gpa": "IPK"
   },
   "en": {
-    "summary": "Professional Summary",
+    "summary": "Professional Profile",
     "experience": "Work Experience",
     "education": "Education",
     "skills": "Skills",
