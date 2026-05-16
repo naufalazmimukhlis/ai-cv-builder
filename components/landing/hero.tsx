@@ -6,15 +6,18 @@ import { ArrowRight, Sparkles, CheckCircle, Zap, Target, Shield } from 'lucide-r
 import { Button } from '@/components/ui/button';
 import { useCVStore } from '@/store/cv-store';
 import { cn } from '@/lib/utils';
-
-const STATS = [
-  { value: '10,000+', label: 'CV dibuat' },
-  { value: '94%', label: 'Lolos ATS' },
-  { value: '5 menit', label: 'Waktu rata-rata' },
-];
+import translations from '@/data/translations.json';
 
 export function LandingHero() {
-  const language = useCVStore((s) => s.language);
+  const language = useCVStore((s) => s.language) || 'id';
+  const lt = (translations as any)?.landing?.[language] || {};
+
+  const stats = [
+    { value: '10,000+', label: lt?.stats?.created || 'CVs' },
+    { value: '94%', label: lt?.stats?.ats_pass || 'ATS' },
+    { value: '5 menit', label: lt?.stats?.avg_time || 'Time' },
+  ];
+
   return (
     <section className="relative min-h-screen flex flex-col hero-gradient" aria-label="Hero section">
       {/* Navbar */}
@@ -63,7 +66,7 @@ export function LandingHero() {
         </div>
         {/* Mobile CTA */}
         <Link href="/builder" className="md:hidden" id="nav-cta-mobile">
-          <Button variant="primary" size="sm">Mulai</Button>
+          <Button variant="primary" size="sm">{language === 'id' ? 'Mulai' : 'Start'}</Button>
         </Link>
       </nav>
 
@@ -80,7 +83,7 @@ export function LandingHero() {
               className="inline-flex items-center gap-2 bg-ai/8 border border-ai/20 rounded-full px-4 py-1.5 mb-6"
             >
               <Sparkles className="w-3.5 h-3.5 text-ai" aria-hidden="true" />
-              <span className="text-xs font-semibold text-ai">AI-Powered • Google Gemini</span>
+              <span className="text-xs font-semibold text-ai">AI-Powered • Local Engine</span>
             </motion.div>
 
             {/* Headline */}
@@ -90,8 +93,17 @@ export function LandingHero() {
               transition={{ duration: 0.55, delay: 0.1 }}
               className="text-4xl md:text-5xl lg:text-display-lg font-display font-bold text-primary leading-tight mb-4 text-balance"
             >
-              CV ATS Profesional{' '}
-              <span className="gradient-text">dalam 5 Menit</span>
+              {language === 'id' ? (
+                <>
+                  {(lt?.hero_title || 'CV ATS Profesional dalam 5 Menit').split('dalam')[0]}
+                  <span className="gradient-text">dalam {(lt?.hero_title || 'CV ATS Profesional dalam 5 Menit').split('dalam')[1]}</span>
+                </>
+              ) : (
+                <>
+                  {(lt?.hero_title || 'Professional ATS CV in 5 Minutes').split('in')[0]}
+                  <span className="gradient-text">in {(lt?.hero_title || 'Professional ATS CV in 5 Minutes').split('in')[1]}</span>
+                </>
+              )}
             </motion.h1>
 
             {/* Subheadline */}
@@ -99,11 +111,11 @@ export function LandingHero() {
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, delay: 0.18 }}
-              className="text-lg text-[#64748B] mb-8 leading-relaxed text-balance"
+              className="text-lg font-bold text-[#000000] mb-8 leading-relaxed text-balance"
             >
-              Dioptimasi AI · Lolos ATS · Diminati HRD
+              {lt?.hero_subtitle || ''}
               <br />
-              <span className="text-base">Buat CV yang menonjol dan siap diunduh sebagai PDF profesional.</span>
+              <span className="text-base font-medium text-[#64748B]">{lt?.hero_desc || ''}</span>
             </motion.p>
 
             {/* Benefits */}
@@ -114,13 +126,8 @@ export function LandingHero() {
               className="space-y-2.5 mb-8"
               aria-label="Keunggulan"
             >
-              {[
-                'Analisis keyword ATS dari job description',
-                'Optimalkan bullet point dengan STAR method',
-                'Generate professional summary dalam bahasa profesional',
-                'Download PDF siap kirim',
-              ].map((benefit) => (
-                <li key={benefit} className="flex items-center gap-2.5 text-sm text-[#1A2332]">
+              {(lt?.benefits || []).map((benefit: string) => (
+                <li key={benefit} className="flex items-center gap-2.5 text-sm text-[#000000] font-bold">
                   <CheckCircle className="w-4 h-4 text-success flex-shrink-0" aria-hidden="true" />
                   {benefit}
                 </li>
@@ -135,13 +142,13 @@ export function LandingHero() {
               className="flex flex-col sm:flex-row gap-3"
             >
               <Link href="/builder" id="hero-primary-cta">
-                <Button variant="warm" size="lg" rightIcon={<ArrowRight className="w-4 h-4" />} className="w-full sm:w-auto">
-                  Buat CV Sekarang
+                <Button variant="warm" size="lg" style={{ backgroundColor: '#000000', color: '#ffffff' }} rightIcon={<ArrowRight className="w-4 h-4" />} className="w-full sm:w-auto">
+                  {lt.cta_start}
                 </Button>
               </Link>
               <a href="#how-it-works" id="hero-secondary-cta">
                 <Button variant="ghost" size="lg" className="w-full sm:w-auto">
-                  Lihat Cara Kerja
+                  {lt.cta_how}
                 </Button>
               </a>
             </motion.div>
@@ -153,7 +160,7 @@ export function LandingHero() {
               transition={{ duration: 0.5, delay: 0.45 }}
               className="flex items-center gap-8 mt-8 pt-8 border-t border-border"
             >
-              {STATS.map((stat) => (
+              {stats.map((stat) => (
                 <div key={stat.label}>
                   <div className="text-xl font-display font-bold text-primary">{stat.value}</div>
                   <div className="text-xs text-[#64748B]">{stat.label}</div>
@@ -197,26 +204,28 @@ export function LandingHero() {
                   </div>
 
                   <div className="mb-3">
-                    <div className="text-[10px] font-bold uppercase tracking-widest text-primary mb-1">Ringkasan Profesional</div>
+                    <div className="text-[10px] font-bold uppercase tracking-widest text-primary mb-1">{language === 'id' ? 'Profil' : 'Profile'}</div>
                     <div className="h-px bg-primary mb-2" />
                     <p className="text-[10px] text-[#333] leading-relaxed">
-                      Software Engineer berpengalaman 5 tahun dengan keahlian React, Node.js, dan AWS. Berhasil meningkatkan performa sistem sebesar 40% dan memimpin tim 8 developer dalam merancang arsitektur microservices untuk 500K+ pengguna.
+                      {language === 'id' 
+                        ? 'Software Engineer berpengalaman 5 tahun dengan keahlian React, Node.js, dan AWS. Berhasil meningkatkan performa sistem sebesar 40% dan memimpin tim 8 developer.'
+                        : 'Experienced Software Engineer with 5 years of expertise in React, Node.js, and AWS. Successfully improved system performance by 40% and led a team of 8 developers.'}
                     </p>
                   </div>
 
                   <div className="mb-3">
-                    <div className="text-[10px] font-bold uppercase tracking-widest text-primary mb-1">Pengalaman Kerja</div>
+                    <div className="text-[10px] font-bold uppercase tracking-widest text-primary mb-1">{language === 'id' ? 'Pengalaman Kerja' : 'Work Experience'}</div>
                     <div className="h-px bg-primary mb-2" />
                     <div className="flex justify-between items-baseline mb-0.5">
                       <span className="text-[10px] font-bold text-primary">Senior Software Engineer</span>
-                      <span className="text-[9px] text-[#555]">2021 – Sekarang</span>
+                      <span className="text-[9px] text-[#555]">2021 – {language === 'id' ? 'Sekarang' : 'Present'}</span>
                     </div>
                     <div className="text-[9.5px] text-[#333] mb-1">PT Teknologi Maju | Jakarta</div>
                     <ul className="space-y-0.5">
                       {[
-                        'Mengembangkan platform e-commerce yang meningkatkan konversi 35% dalam 6 bulan',
-                        'Memimpin tim 8 developer dalam migrasi ke arsitektur microservices',
-                        'Mengoptimalkan query database yang mengurangi latency API sebesar 60%',
+                        language === 'id' ? 'Mengembangkan platform e-commerce yang meningkatkan konversi 35%' : 'Developed e-commerce platform that increased conversion by 35%',
+                        language === 'id' ? 'Memimpin tim 8 developer dalam migrasi ke microservices' : 'Led a team of 8 developers in migrating to microservices',
+                        language === 'id' ? 'Mengoptimalkan query database yang mengurangi latency 60%' : 'Optimized database queries reducing latency by 60%',
                       ].map((b, i) => (
                         <li key={i} className="text-[9.5px] text-[#222] pl-3 relative">
                           <span className="absolute left-0 text-primary">•</span>
@@ -227,15 +236,11 @@ export function LandingHero() {
                   </div>
 
                   <div>
-                    <div className="text-[10px] font-bold uppercase tracking-widest text-primary mb-1">Keahlian</div>
+                    <div className="text-[10px] font-bold uppercase tracking-widest text-primary mb-1">{language === 'id' ? 'Keahlian' : 'Skills'}</div>
                     <div className="h-px bg-primary mb-2" />
                     <div className="text-[9.5px] text-[#222]">
                       <span className="font-semibold text-primary">Technical: </span>
                       React, Node.js, TypeScript, Python, PostgreSQL, Redis
-                    </div>
-                    <div className="text-[9.5px] text-[#222] mt-0.5">
-                      <span className="font-semibold text-primary">Tools: </span>
-                      Docker, Kubernetes, AWS, Git, Jira
                     </div>
                   </div>
                 </div>
@@ -243,7 +248,9 @@ export function LandingHero() {
                 {/* AI Enhanced badge */}
                 <div className="bg-gradient-to-r from-ai/5 to-accent/5 border-t border-border/50 px-6 py-3 flex items-center gap-2">
                   <Sparkles className="w-3.5 h-3.5 text-ai" aria-hidden="true" />
-                  <span className="text-xs text-ai font-medium">Disempurnakan dengan AI • Siap untuk ATS</span>
+                  <span className="text-xs text-ai font-medium">
+                    {language === 'id' ? 'Disempurnakan dengan AI • Siap untuk ATS' : 'Enhanced with AI • ATS Ready'}
+                  </span>
                 </div>
               </div>
 

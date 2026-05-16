@@ -333,6 +333,25 @@
   }
 }
 
+* {
+  word-break: break-word;
+}
+
+html,
+body {
+  overflow-x: hidden;
+}
+
+@media print {
+  body {
+    background: white !important;
+  }
+
+  * {
+    box-shadow: none !important;
+  }
+}
+
 /* ============================================================
    CV Preview Styles (for browser rendering)
    ============================================================ */
@@ -340,33 +359,34 @@
   font-family: Georgia, 'Times New Roman', serif;
   font-size: 11pt;
   line-height: 1.5;
-  color: #1a1a1a;
+  color: #000000 !important;
   max-width: 21cm;
   margin: 0 auto;
   padding: 1.8cm 2cm;
-  background: #fff;
+  background: #fff !important;
+  font-weight: 500 !important;
 }
 
 .cv-name {
   font-size: 22pt;
   font-weight: 700;
   letter-spacing: 0.02em;
-  color: #0F2040;
+  color: #000000 !important;
   margin-bottom: 2px;
 }
 
 .cv-title {
   font-size: 13pt;
-  color: #2D7DD2;
-  font-weight: 400;
+  color: #000000 !important;
+  font-weight: 600;
   margin-bottom: 10px;
 }
 
 .cv-contact-bar {
   font-size: 9.5pt;
-  color: #444;
-  border-top: 1.5px solid #0F2040;
-  border-bottom: 1.5px solid #0F2040;
+  color: #000000 !important;
+  border-top: 2px solid #000000 !important;
+  border-bottom: 2px solid #000000 !important;
   padding: 5px 0;
   margin-bottom: 14px;
   display: flex;
@@ -379,15 +399,16 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: #0F2040;
+  color: #000000 !important;
   margin-bottom: 4px;
   margin-top: 14px;
 }
 
 .cv-section-divider {
-  border: none;
-  border-top: 1px solid #0F2040;
+  border: none !important;
+  border-top: 2px solid #000000 !important;
   margin-bottom: 8px;
+  opacity: 1 !important;
 }
 
 .cv-exp-header {
@@ -398,18 +419,20 @@
 
 .cv-exp-title {
   font-size: 11pt;
-  font-weight: 600;
-  color: #0F2040;
+  font-weight: 700;
+  color: #000000 !important;
 }
 
 .cv-exp-date {
   font-size: 9.5pt;
-  color: #555;
+  font-weight: 700;
+  color: #000000 !important;
 }
 
 .cv-exp-company {
   font-size: 10.5pt;
-  color: #333;
+  font-weight: 700;
+  color: #000000 !important;
   margin-bottom: 4px;
 }
 
@@ -421,26 +444,28 @@
 
 .cv-bullet-list li {
   font-size: 10pt;
-  color: #222;
+  color: #000000 !important;
   padding: 1.5px 0 1.5px 14px;
   position: relative;
+  font-weight: 500;
 }
 
 .cv-bullet-list li::before {
   content: '•';
   position: absolute;
   left: 0;
-  color: #0F2040;
+  color: #000000 !important;
 }
 
 .cv-skills-row {
   margin-bottom: 4px;
   font-size: 10pt;
+  color: #000000 !important;
 }
 
 .cv-skills-label {
-  font-weight: 600;
-  color: #0F2040;
+  font-weight: 700;
+  color: #000000 !important;
 }
 
 /* ============================================================

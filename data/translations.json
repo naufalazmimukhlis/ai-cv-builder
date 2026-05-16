@@ -22,7 +22,7 @@
     "gpa": "IPK"
   },
   "en": {
-    "summary": "Professional Profile",
+    "summary": "Profile",
     "experience": "Work Experience",
     "education": "Education",
     "skills": "Skills",
@@ -42,5 +42,148 @@
     "soft_skills": "Soft Skills",
     "languages": "Languages",
     "gpa": "GPA"
+  },
+  "landing": {
+    "id": {
+      "hero_title": "CV ATS Profesional dalam 5 Menit",
+      "hero_subtitle": "Dioptimasi AI · Lolos ATS · Diminati HRD",
+      "hero_desc": "Buat CV yang menonjol dan siap diunduh sebagai PDF profesional.",
+      "benefits": [
+        "Analisis keyword ATS dari job description",
+        "Optimalkan bullet point dengan STAR method",
+        "Generate profil dalam bahasa profesional",
+        "Download PDF siap kirim"
+      ],
+      "cta_start": "Buat CV Sekarang",
+      "cta_how": "Lihat Cara Kerja",
+      "stats": {
+        "created": "CV dibuat",
+        "ats_pass": "Lolos ATS",
+        "avg_time": "Waktu rata-rata"
+      },
+      "features_badge": "Fitur Utama",
+      "features_title": "Semua yang Kamu Butuhkan untuk CV Terbaik",
+      "features_desc": "Platform lengkap dengan AI yang memahami standar ATS dan preferensi HRD Indonesia.",
+      "feature_list": [
+        {
+          "title": "ATS Keyword Extraction",
+          "desc": "AI menganalisis job description dan mengekstrak semua keyword ATS yang relevan secara otomatis."
+        },
+        {
+          "title": "AI CV Enhancement",
+          "desc": "Sempurnakan seluruh CV dengan satu klik. AI mengoptimalkan summary, bullet points, dan skills."
+        },
+        {
+          "title": "Live CV Preview",
+          "desc": "Lihat perubahan CV secara real-time saat mengisi form. Template ATS-strict — clean dan professional."
+        },
+        {
+          "title": "ATS Score Checker",
+          "desc": "Dapatkan skor ATS 0-100 dengan analisis detail. Ketahui seberapa compatible CV Anda."
+        },
+        {
+          "title": "Bullet Point Optimizer",
+          "desc": "Optimalkan setiap deskripsi pekerjaan dengan action verb yang kuat menggunakan STAR method."
+        },
+        {
+          "title": "PDF Export Profesional",
+          "desc": "Unduh CV sebagai PDF siap kirim. Pixel-perfect, konsisten di semua browser."
+        }
+      ],
+      "how_title": "Cara Kerja dalam 3 Langkah",
+      "how_desc": "Dari nol hingga CV profesional siap kirim, hanya dalam waktu 5 menit.",
+      "how_steps": [
+        {
+          "title": "Isi Data CV (5 Langkah)",
+          "desc": "Lengkapi info pribadi, target posisi, pengalaman kerja, keahlian, dan pendidikan melalui form intuitif.",
+          "detail": "Info → Target → Pengalaman → Keahlian → Pendidikan"
+        },
+        {
+          "title": "AI Sempurnakan CV Anda",
+          "desc": "Klik \"Sempurnakan dengan AI\" dan biarkan AI mengoptimalkan segalanya—dari summary hingga bullet points.",
+          "detail": "Analisis JD → Keywords → Optimasi → Skor"
+        },
+        {
+          "title": "Preview & Unduh PDF",
+          "desc": "Review CV dalam pratinjau real-time, lakukan penyesuaian, dan unduh sebagai PDF profesional.",
+          "detail": "Live Preview → Sesuaikan → Unduh PDF"
+        }
+      ],
+      "cta_footer": "Mulai Buat CV Sekarang — Gratis",
+      "no_registration": "Tidak butuh registrasi. Tidak ada biaya tersembunyi.",
+      "footer_tagline": "Platform AI terbaik untuk CV ATS profesional."
+    },
+    "en": {
+      "hero_title": "Professional ATS CV in 5 Minutes",
+      "hero_subtitle": "AI-Optimized · ATS-Friendly · Recruiter-Approved",
+      "hero_desc": "Create a standout CV ready to download as a professional PDF.",
+      "benefits": [
+        "ATS keyword analysis from job description",
+        "Optimize bullet points with STAR method",
+        "Generate professional profile automatically",
+        "Download print-ready PDF"
+      ],
+      "cta_start": "Create CV Now",
+      "cta_how": "How It Works",
+      "stats": {
+        "created": "CVs created",
+        "ats_pass": "ATS Pass Rate",
+        "avg_time": "Average time"
+      },
+      "features_badge": "Core Features",
+      "features_title": "Everything You Need for the Best CV",
+      "features_desc": "A complete platform with AI that understands global ATS standards and HR preferences.",
+      "feature_list": [
+        {
+          "title": "ATS Keyword Extraction",
+          "desc": "AI analyzes job descriptions and extracts all relevant ATS keywords automatically."
+        },
+        {
+          "title": "AI CV Enhancement",
+          "desc": "Perfect your entire CV with one click. AI optimizes summary, bullet points, and skills."
+        },
+        {
+          "title": "Live CV Preview",
+          "desc": "See CV changes in real-time as you fill the form. ATS-strict templates — clean and professional."
+        },
+        {
+          "title": "ATS Score Checker",
+          "desc": "Get an ATS score of 0-100 with detailed analysis. Know how compatible your CV is."
+        },
+        {
+          "title": "Bullet Point Optimizer",
+          "desc": "Optimize every job description with strong action verbs using the STAR method."
+        },
+        {
+          "title": "Professional PDF Export",
+          "desc": "Download your CV as a print-ready PDF. Pixel-perfect and consistent across all browsers."
+        }
+      ],
+      "how_title": "How It Works in 3 Steps",
+      "how_desc": "From zero to a professional CV ready to send, in just 5 minutes.",
+      "how_steps": [
+        {
+          "title": "Fill CV Data (5 Steps)",
+          "desc": "Complete your personal info, target position, work experience, skills, and education through an intuitive form.",
+          "detail": "Info → Target → Experience → Skills → Education"
+        },
+        {
+          "title": "AI Enhances Your CV",
+          "desc": "Click \"Enhance with AI\" and let the AI optimize everything—from your summary to bullet points.",
+          "detail": "Analyze JD → Keywords → Optimize → Score"
+        },
+        {
+          "title": "Preview & Download PDF",
+          "desc": "Review your CV in a real-time preview, make adjustments, and download as a professional PDF.",
+          "detail": "Live Preview → Adjust → Download PDF"
+        }
+      ],
+      "cta_footer": "Start Creating Your CV Now — For Free",
+      "no_registration": "No registration required. No hidden fees.",
+      "footer_tagline": "The best AI platform for professional ATS CVs.",
+      "product": "Product",
+      "company": "Company",
+      "support": "Support"
+    }
   }
 }

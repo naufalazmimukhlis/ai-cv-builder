@@ -1,16 +1,15 @@
 'use client';
 
+import React from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Sparkles, Edit2 } from 'lucide-react';
+import { ArrowLeft, Sparkles, Edit2, Languages } from 'lucide-react';
 import { ATSTemplate } from '@/components/cv-template/ats-template';
 import { PDFExportButton } from '@/components/pdf-export-button';
 import { Button } from '@/components/ui/button';
 import { useCVStore } from '@/store/cv-store';
 import { ATSScoreBadge } from '@/components/ai-enhance/ats-score-badge';
 import { cn } from '@/lib/utils';
-
 import translations from '@/data/translations.json';
-import { Languages } from 'lucide-react';
 
 export default function PreviewPage() {
   const atsScore = useCVStore((s) => s.atsScore);
@@ -19,7 +18,7 @@ export default function PreviewPage() {
   const resumeRef = React.useRef<HTMLDivElement>(null);
 
   return (
-    <div className="min-h-screen bg-surface">
+    <div className="min-h-screen bg-surface overflow-x-hidden">
       {/* Header */}
       <header className="bg-white border-b border-border sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
@@ -68,7 +67,7 @@ export default function PreviewPage() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-24">
+      <main className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-4 md:py-8 pb-24">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Left: Tips & Stats */}
           <div className="w-full lg:w-80 flex-shrink-0 space-y-6">
@@ -118,9 +117,21 @@ export default function PreviewPage() {
           </div>
 
           {/* Right: CV Preview */}
-          <div className="flex-1 flex justify-center animate-slide-up">
-            <div className="bg-white rounded-xl shadow-modal border border-border overflow-hidden w-full max-w-[21cm]">
-              <ATSTemplate ref={resumeRef} />
+          <div className="flex-1 flex justify-center animate-slide-up overflow-x-hidden">
+            <div
+              ref={resumeRef}
+              className="
+                w-full
+                max-w-[850px]
+                mx-auto
+                bg-white
+                shadow-lg
+                print:shadow-none
+                animate-fade-in
+              "
+              style={{ backgroundColor: '#ffffff' }}
+            >
+              <ATSTemplate />
             </div>
           </div>
         </div>

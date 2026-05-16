@@ -50,43 +50,45 @@ export const ATSTemplate = React.forwardRef<HTMLDivElement, ATSTemplateProps>(
       <div 
         ref={ref} 
         className={`cv-preview-container ${className || ''}`}
-        style={{ width: '100%', maxWidth: '21cm', margin: '0 auto' }}
       >
         {/* Header */}
-        <div className="mb-4">
+        <div className="mb-6">
           {personal?.fullName && (
-            <div className="cv-name">{personal.fullName}</div>
+            <div className="cv-name">
+              {personal.fullName}
+            </div>
           )}
           {target?.jobTitle && (
-            <div className="cv-title">{target.jobTitle}</div>
+            <div className="cv-title">
+              {target.jobTitle}
+            </div>
           )}
         </div>
 
         {/* Contact Bar */}
         <div className="cv-contact-bar">
           {personal?.email && (
-            <span>{personal.email}</span>
+            <span className="font-bold">{personal.email}</span>
           )}
           {personal?.phone && (
-            <span>{personal.phone}</span>
+            <span className="font-bold">{personal.phone}</span>
           )}
           {personal?.location && (
-            <span>{personal.location}</span>
+            <span className="font-bold">{personal.location}</span>
           )}
           {personal?.linkedin && (
-            <span>{personal.linkedin.replace(/^https?:\/\//i, '')}</span>
-          )}
-          {personal?.portfolio && (
-            <span>{personal.portfolio.replace(/^https?:\/\//i, '')}</span>
+            <span className="font-bold">{personal.linkedin.replace(/^https?:\/\//i, '')}</span>
           )}
         </div>
 
         {/* Profile / Summary Section */}
         {summary && (
-          <div className="break-inside-avoid" style={{ marginBottom: '16px' }}>
-            <div className="cv-section-title">{t.summary.toUpperCase()}</div>
+          <div className="break-inside-avoid mb-6">
+            <div className="cv-section-title">
+              {t.summary}
+            </div>
             <hr className="cv-section-divider" />
-            <p className="pdf-stable-text" style={{ fontSize: '10pt', color: '#333', textAlign: 'justify', whiteSpace: 'pre-line', marginTop: '4px' }}>
+            <p className="text-sm md:text-base leading-relaxed text-justify break-words whitespace-pre-wrap font-medium">
               {summary}
             </p>
           </div>
@@ -94,11 +96,13 @@ export const ATSTemplate = React.forwardRef<HTMLDivElement, ATSTemplateProps>(
 
         {/* Work Experience */}
         {experiences && experiences.length > 0 && (
-          <div className="break-inside-avoid">
-            <div className="cv-section-title">{t.experience.toUpperCase()}</div>
+          <div className="break-inside-avoid mb-6">
+            <div className="cv-section-title">
+              {t.experience}
+            </div>
             <hr className="cv-section-divider" />
             {experiences.map((exp) => (
-              <div key={exp.id} className="break-inside-avoid" style={{ marginBottom: '10px' }}>
+              <div key={exp.id} className="break-inside-avoid mb-4">
                 <div className="cv-exp-header">
                   <span className="cv-exp-title">
                     {lang === 'id' ? exp.jobTitleId : exp.jobTitleEn}
@@ -123,7 +127,11 @@ export const ATSTemplate = React.forwardRef<HTMLDivElement, ATSTemplateProps>(
                     {exp.bullets.map((bullet) => {
                       const bulletText = lang === 'id' ? bullet.textId : bullet.textEn;
                       if (!bulletText.trim()) return null;
-                      return <li key={bullet.id}>{bulletText}</li>;
+                      return (
+                        <li key={bullet.id}>
+                          {bulletText}
+                        </li>
+                      );
                     })}
                   </ul>
                 )}
@@ -135,44 +143,50 @@ export const ATSTemplate = React.forwardRef<HTMLDivElement, ATSTemplateProps>(
         {/* Skills */}
         {skills && (
           Object.values(skills).some((arr) => arr.length > 0) && (
-            <div className="break-inside-avoid">
-              <div className="cv-section-title">{t.skills.toUpperCase()}</div>
+            <div className="break-inside-avoid mb-6">
+              <div className="cv-section-title">
+                {t.skills}
+              </div>
               <hr className="cv-section-divider" />
-              {skills.technical.length > 0 && (
-                <div className="cv-skills-row">
-                  <span className="cv-skills-label">{t.technical_skills}: </span>
-                  {skills.technical.join(', ')}
-                </div>
-              )}
-              {skills.tools.length > 0 && (
-                <div className="cv-skills-row">
-                  <span className="cv-skills-label">Tools: </span>
-                  {skills.tools.join(', ')}
-                </div>
-              )}
-              {skills.soft.length > 0 && (
-                <div className="cv-skills-row">
-                  <span className="cv-skills-label">{t.soft_skills}: </span>
-                  {skills.soft.join(', ')}
-                </div>
-              )}
-              {skills.languages.length > 0 && (
-                <div className="cv-skills-row">
-                  <span className="cv-skills-label">{t.languages}: </span>
-                  {skills.languages.join(', ')}
-                </div>
-              )}
+              <div className="space-y-1.5">
+                {skills.technical.length > 0 && (
+                  <div className="cv-skills-row">
+                    <span className="cv-skills-label">{t.technical_skills}: </span>
+                    {skills.technical.join(', ')}
+                  </div>
+                )}
+                {skills.tools.length > 0 && (
+                  <div className="cv-skills-row">
+                    <span className="cv-skills-label">Tools: </span>
+                    {skills.tools.join(', ')}
+                  </div>
+                )}
+                {skills.soft.length > 0 && (
+                  <div className="cv-skills-row">
+                    <span className="cv-skills-label">{t.soft_skills}: </span>
+                    {skills.soft.join(', ')}
+                  </div>
+                )}
+                {skills.languages.length > 0 && (
+                  <div className="cv-skills-row">
+                    <span className="cv-skills-label">{t.languages}: </span>
+                    {skills.languages.join(', ')}
+                  </div>
+                )}
+              </div>
             </div>
           )
         )}
 
         {/* Education */}
         {education && education.length > 0 && (
-          <div className="break-inside-avoid">
-            <div className="cv-section-title">{t.education.toUpperCase()}</div>
+          <div className="break-inside-avoid mb-6">
+            <div className="cv-section-title">
+              {t.education}
+            </div>
             <hr className="cv-section-divider" />
             {education.map((edu) => (
-              <div key={edu.id} className="break-inside-avoid" style={{ marginBottom: '8px' }}>
+              <div key={edu.id} className="break-inside-avoid mb-3">
                 <div className="cv-exp-header">
                   <span className="cv-exp-title">
                     {lang === 'id' ? edu.degreeId : edu.degreeEn} — {lang === 'id' ? edu.majorId : edu.majorEn}
@@ -191,12 +205,14 @@ export const ATSTemplate = React.forwardRef<HTMLDivElement, ATSTemplateProps>(
         {/* Certifications */}
         {certifications && certifications.length > 0 && (
           <div className="break-inside-avoid">
-            <div className="cv-section-title">{t.certifications.toUpperCase()}</div>
+            <div className="cv-section-title">
+              {t.certifications}
+            </div>
             <hr className="cv-section-divider" />
             {certifications.map((cert) => (
-              <div key={cert.id} className="break-inside-avoid" style={{ marginBottom: '4px' }}>
+              <div key={cert.id} className="break-inside-avoid mb-2">
                 <div className="cv-exp-header">
-                  <span style={{ fontSize: '10pt', color: '#222' }}>
+                  <span className="cv-exp-title">
                     {lang === 'id' ? cert.nameId : cert.nameEn} — {cert.issuer}
                   </span>
                   {cert.year && (

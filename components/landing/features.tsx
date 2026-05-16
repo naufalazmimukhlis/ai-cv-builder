@@ -2,6 +2,8 @@
 
 import { motion } from 'framer-motion';
 import { Cpu, Target, FileText, Download, Sparkles, TrendingUp, Zap } from 'lucide-react';
+import { useCVStore } from '@/store/cv-store';
+import translations from '@/data/translations.json';
 
 const FEATURES = [
   {
@@ -69,6 +71,9 @@ const itemVariants = {
 };
 
 export function LandingFeatures() {
+  const language = useCVStore((s) => s.language) || 'id';
+  const lt = (translations as any)?.landing?.[language] || {};
+
   return (
     <section id="features" className="py-20 px-6 lg:px-12 bg-surface-2" aria-labelledby="features-title">
       <div className="max-w-6xl mx-auto">
@@ -82,14 +87,24 @@ export function LandingFeatures() {
         >
           <div className="inline-flex items-center gap-2 bg-accent/10 border border-accent/20 rounded-full px-4 py-1.5 mb-4">
             <Zap className="w-3.5 h-3.5 text-accent" aria-hidden="true" />
-            <span className="text-xs font-semibold text-accent">Fitur Unggulan</span>
+            <span className="text-xs font-semibold text-accent">{lt?.features_badge || 'Features'}</span>
           </div>
           <h2 id="features-title" className="text-3xl md:text-4xl font-display font-bold text-primary mb-4">
-            Semua yang Kamu Butuhkan untuk{' '}
-            <span className="gradient-text">CV Terbaik</span>
+            {(lt?.features_title || 'Fitur Lengkap untuk CV ATS').includes('untuk') ? (
+              <>
+                {(lt?.features_title || 'Fitur Lengkap untuk CV ATS').split('untuk')[0]}untuk{' '}
+                <span className="gradient-text">
+                  {(lt?.features_title || 'Fitur Lengkap untuk CV ATS').split('untuk')[1]}
+                </span>
+              </>
+            ) : (
+              <span className="gradient-text">
+                {lt?.features_title || 'Professional ATS Features'}
+              </span>
+            )}
           </h2>
-          <p className="text-[#64748B] max-w-xl mx-auto">
-            Platform lengkap dengan AI yang memahami standar ATS dan preferensi HRD Indonesia.
+          <p className="text-[#64748B] max-w-xl mx-auto font-medium">
+            {lt?.features_desc || ''}
           </p>
         </motion.div>
 
@@ -101,19 +116,25 @@ export function LandingFeatures() {
           viewport={{ once: true, margin: '-40px' }}
           className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
-          {FEATURES.map((feature) => (
-            <motion.div
-              key={feature.title}
-              variants={itemVariants}
-              className="bg-white rounded-2xl p-6 border border-border shadow-card card-hover group"
-            >
-              <div className={`w-11 h-11 rounded-xl ${feature.bg} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                <feature.icon className={`w-5 h-5 ${feature.color}`} aria-hidden="true" />
-              </div>
-              <h3 className="font-display font-semibold text-primary mb-2">{feature.title}</h3>
-              <p className="text-sm text-[#64748B] leading-relaxed">{feature.description}</p>
-            </motion.div>
-          ))}
+          {(lt?.feature_list || []).map((feature: any, index: number) => {
+            const Icon = FEATURES[index].icon;
+            const color = FEATURES[index].color;
+            const bg = FEATURES[index].bg;
+            
+            return (
+              <motion.div
+                key={feature.title}
+                variants={itemVariants}
+                className="bg-white rounded-2xl p-6 border border-border shadow-card card-hover group"
+              >
+                <div className={`w-11 h-11 rounded-xl ${bg} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                  <Icon className={`w-5 h-5 ${color}`} aria-hidden="true" />
+                </div>
+                <h3 className="font-display font-semibold text-primary mb-2">{feature.title}</h3>
+                <p className="text-sm text-[#64748B] leading-relaxed font-medium">{feature.desc}</p>
+              </motion.div>
+            );
+          })}
         </motion.div>
       </div>
     </section>

@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ClipboardList, Sparkles, Download, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useCVStore } from '@/store/cv-store';
+import translations from '@/data/translations.json';
 
 const STEPS = [
   {
@@ -42,6 +44,9 @@ const STEPS = [
 ];
 
 export function LandingHowItWorks() {
+  const language = useCVStore((s) => s.language) || 'id';
+  const lt = (translations as any)?.landing?.[language] || {};
+
   return (
     <section id="how-it-works" className="py-20 px-6 lg:px-12 bg-white" aria-labelledby="how-title">
       <div className="max-w-6xl mx-auto">
@@ -54,11 +59,17 @@ export function LandingHowItWorks() {
           className="text-center mb-14"
         >
           <h2 id="how-title" className="text-3xl md:text-4xl font-display font-bold text-primary mb-4">
-            Cara Kerja{' '}
-            <span className="gradient-text-ai">3 Langkah</span>
+            {(lt?.how_title || 'Cara Kerja dalam 3 Langkah').includes('3 Langkah') ? (
+              <>
+                {(lt?.how_title || 'Cara Kerja dalam 3 Langkah').split('3 Langkah')[0]}
+                <span className="gradient-text-ai">3 Langkah</span>
+              </>
+            ) : (
+              <span className="gradient-text-ai">{lt?.how_title || 'How It Works'}</span>
+            )}
           </h2>
-          <p className="text-[#64748B] max-w-xl mx-auto">
-            Dari nol hingga CV profesional siap kirim, hanya dalam 5 menit.
+          <p className="text-[#64748B] max-w-xl mx-auto font-medium">
+            {lt?.how_desc || ''}
           </p>
         </motion.div>
 
@@ -68,34 +79,41 @@ export function LandingHowItWorks() {
           <div className="hidden md:block absolute top-8 left-1/3 w-1/3 h-0.5 bg-gradient-to-r from-accent/30 to-ai/30" aria-hidden="true" />
           <div className="hidden md:block absolute top-8 left-2/3 w-1/3 h-0.5 bg-gradient-to-r from-ai/30 to-success/30" aria-hidden="true" />
 
-          {STEPS.map((step, index) => (
-            <motion.div
-              key={step.step}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.45, delay: index * 0.1 }}
-              className="relative"
-            >
-              <div className={`bg-gradient-to-br ${step.bg} border ${step.border} rounded-2xl p-6 h-full`}>
-                {/* Step number */}
-                <div className="flex items-center justify-between mb-4">
-                  <div className={`w-12 h-12 rounded-xl bg-white shadow-card flex items-center justify-center`}>
-                    <step.icon className={`w-5 h-5 ${step.color}`} aria-hidden="true" />
+          {(lt?.how_steps || []).map((step: any, index: number) => {
+            const Icon = STEPS[index].icon;
+            const color = STEPS[index].color;
+            const bg = STEPS[index].bg;
+            const border = STEPS[index].border;
+            
+            return (
+              <motion.div
+                key={step.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ duration: 0.45, delay: index * 0.1 }}
+                className="relative"
+              >
+                <div className={`bg-gradient-to-br ${bg} border ${border} rounded-2xl p-6 h-full`}>
+                  {/* Step number */}
+                  <div className="flex items-center justify-between mb-4">
+                    <div className={`w-12 h-12 rounded-xl bg-white shadow-card flex items-center justify-center`}>
+                      <Icon className={`w-5 h-5 ${color}`} aria-hidden="true" />
+                    </div>
+                    <span className="text-3xl font-display font-bold text-border">0{index + 1}</span>
                   </div>
-                  <span className="text-3xl font-display font-bold text-border">{step.step}</span>
-                </div>
 
-                <h3 className="font-display font-semibold text-primary text-lg mb-2">{step.title}</h3>
-                <p className="text-sm text-[#64748B] leading-relaxed mb-4">{step.description}</p>
+                  <h3 className="font-display font-semibold text-primary text-lg mb-2">{step.title}</h3>
+                  <p className="text-sm text-[#64748B] leading-relaxed mb-4 font-medium">{step.desc}</p>
 
-                {/* Detail flow */}
-                <div className="bg-white/60 rounded-lg px-3 py-2">
-                  <p className="text-[10px] font-mono text-[#64748B] tracking-wide">{step.detail}</p>
+                  {/* Detail flow */}
+                  <div className="bg-white/60 rounded-lg px-3 py-2">
+                    <p className="text-[10px] font-mono text-[#64748B] tracking-wide font-bold">{step.detail}</p>
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
 
         {/* CTA */}
@@ -107,11 +125,11 @@ export function LandingHowItWorks() {
           className="text-center"
         >
           <Link href="/builder" id="how-it-works-cta">
-            <Button variant="warm" size="xl" rightIcon={<ArrowRight className="w-5 h-5" />}>
-              Mulai Buat CV Sekarang — Gratis
+            <Button variant="warm" size="xl" style={{ backgroundColor: '#000', color: '#fff' }} rightIcon={<ArrowRight className="w-5 h-5" />}>
+              {lt.cta_footer}
             </Button>
           </Link>
-          <p className="text-sm text-[#64748B] mt-3">Tidak perlu daftar. Tidak ada biaya tersembunyi.</p>
+          <p className="text-sm text-[#64748B] mt-3 font-medium">{lt.no_registration}</p>
         </motion.div>
       </div>
     </section>
